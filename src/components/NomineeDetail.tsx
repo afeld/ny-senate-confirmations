@@ -8,6 +8,7 @@ import AirtableService, { AirtableRecord } from "../services/airtable";
 const NomineeDetail: React.FC = () => {
   const { nomineeId } = useParams<{ nomineeId: string }>();
   const [nominee, setNominee] = useState<AirtableRecord | null>(null);
+  const [position, setPosition] = useState<AirtableRecord | null>(null);
   const [votes, setVotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,6 +25,14 @@ const NomineeDetail: React.FC = () => {
         if (!foundNominee) {
           setLoading(false);
           return;
+        }
+
+        // Load position data
+        const positionIds = foundNominee.fields["Position"] as string[] | undefined;
+        if (positionIds && positionIds.length > 0) {
+          const positions = await service.getRecordsFromTable("Positions");
+          const foundPosition = positions.find((p) => p.id === positionIds[0]);
+          setPosition(foundPosition || null);
         }
 
         // Get the slate ID(s) from the nominee
@@ -111,6 +120,14 @@ const NomineeDetail: React.FC = () => {
       <div className="nominee-info-card">
         <h1>{nominee.fields["Full Name"] as string}</h1>
         <div className="nominee-details">
+          {position && (
+            <div>
+              <strong>Position:</strong>{" "}
+              <Link to={`/positions/${position.id}`} className="table-link">
+                {String(position.fields["Name"])}
+              </Link>
+            </div>
+          )}
           {nominee.fields["Year"] && (
             <div>
               <strong>Year:</strong> {String(nominee.fields["Year"])}

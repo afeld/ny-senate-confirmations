@@ -1,20 +1,63 @@
-import React from "react";
-import DataTable, { html } from "./DataTable";
+import React, { useEffect, useState } from "react";
+import { Grid } from "gridjs-react";
+import { html } from "gridjs";
+import "gridjs/dist/theme/mermaid.css";
+import AirtableService from "../services/airtable";
 
 const NomineesTable: React.FC = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const service = new AirtableService();
+        const nominees = await service.getRecordsFromTable("Nominees");
+        const positions = await service.getRecordsFromTable("Positions");
+        const positionsMap = new Map(positions.map((p) => [p.id, p]));
+
+        const tableData = nominees.map((record) => {
+          const positionIds = record.fields["Position"] as string[] | undefined;
+          const positionId = positionIds?.[0];
+          const position = positionId ? positionsMap.get(positionId) : null;
+          const positionName = position?.fields["Name"] || "";
+
+          return [
+            record.id,
+            record.fields["Full Name"] || "",
+            positionId || "",
+            positionName,
+            record.fields["Year"] || "",
+            record.fields["Confirmed?"] || "",
+            record.fields["Ayes"] || 0,
+            record.fields["Nays"] || 0,
+          ];
+        });
+
+        // Sort by name (index 1)
+        tableData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+
+        setData(tableData);
+      } catch (error) {
+        console.error("Error loading nominees:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading nominees...</div>;
+  }
+
   return (
-    <DataTable
-      tableName="Nominees"
-      sortByIndex={1}
-      transformRecord={(record) => [
-        record.id,
-        record.fields["Full Name"] || "",
-        record.fields["Year"] || "",
-        record.fields["Confirmed?"] || "",
-        record.fields["Ayes"] || 0,
-        record.fields["Nays"] || 0,
-      ]}
-      columns={[
+    <div>
+      <h2>Nominees</h2>
+      <Grid
+        data={data}
+        columns={[
         {
           id: "id",
           hidden: true,
@@ -28,12 +71,33 @@ const NomineesTable: React.FC = () => {
             );
           },
         },
+        {
+          id: "positionId",
+          hidden: true,
+        },
+        {
+          name: "Position",
+          formatter: (cell: any, row: any) => {
+            const positionId = row.cells[2].data;
+            if (!positionId || !cell) return "";
+            return html(
+              `<a href="/positions/${positionId}" class="table-link">${cell}</a>`
+            );
+          },
+        },
         "Year",
         "Confirmed?",
         "Ayes",
         "Nays",
       ]}
-    />
+      search={true}
+      sort={true}
+      pagination={{
+        limit: 20,
+      }}
+      fixedHeader={true}
+      />
+    </div>
   );
 };
 
