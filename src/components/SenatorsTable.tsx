@@ -27,6 +27,9 @@ const SenatorsTable: React.FC = () => {
           record.fields["Number of Votes"] || 0,
         ]);
 
+        // Sort by name (index 0)
+        tableData.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+
         setData(tableData);
       } catch (error) {
         console.error("Error loading senators:", error);
@@ -53,6 +56,7 @@ const SenatorsTable: React.FC = () => {
         pagination={{
           limit: 20,
         }}
+        fixedHeader={true}
       />
     </div>
   );

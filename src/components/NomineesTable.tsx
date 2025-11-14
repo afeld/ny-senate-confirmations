@@ -24,6 +24,9 @@ const NomineesTable: React.FC = () => {
           record.fields["Nays"] || 0,
         ]);
 
+        // Sort by name (index 1)
+        tableData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+
         setData(tableData);
       } catch (error) {
         console.error("Error loading nominees:", error);
@@ -68,6 +71,7 @@ const NomineesTable: React.FC = () => {
         pagination={{
           limit: 20,
         }}
+        fixedHeader={true}
       />
     </div>
   );
