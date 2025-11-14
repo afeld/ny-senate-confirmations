@@ -13,52 +13,11 @@ A React TypeScript application that displays data from all tables in an Airtable
 
 ## Setup
 
-1. **Install dependencies:**
+Install dependencies:
 
-   ```bash
-   npm install
-   ```
-
-2. **Configure Airtable credentials:**
-
-   Create a `.env` file in the root directory:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` and add your Airtable credentials:
-
-   ```
-   REACT_APP_AIRTABLE_API_KEY=your_api_key_here
-   REACT_APP_AIRTABLE_BASE_ID=your_base_id_here
-   ```
-
-3. **Configure table names:**
-
-   Open `src/services/airtable.ts` and add your table names to the `getAllTables()` method:
-
-   ```typescript
-   const tableNames: string[] = [
-     "Contacts",
-     "Companies",
-     "Projects",
-     // Add your table names here
-   ];
-   ```
-
-## Getting Your Airtable Credentials
-
-### API Key
-
-1. Go to https://airtable.com/account
-2. In the API section, generate or copy your API key
-
-### Base ID
-
-1. Go to https://airtable.com/api
-2. Select your base
-3. The Base ID is in the URL and in the introduction section (starts with "app...")
+```bash
+npm install
+```
 
 ## Running the App
 

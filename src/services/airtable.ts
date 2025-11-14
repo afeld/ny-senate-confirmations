@@ -1,4 +1,5 @@
 import Airtable, { FieldSet, Records } from "airtable";
+import { AIRTABLE_CONFIG } from "../config/airtable";
 
 export interface AirtableRecord {
   id: string;
@@ -15,20 +16,11 @@ class AirtableService {
   private base: Airtable.Base;
 
   constructor() {
-    const apiKey = process.env.REACT_APP_AIRTABLE_API_KEY;
-    const baseId = process.env.REACT_APP_AIRTABLE_BASE_ID;
-
-    if (!apiKey || !baseId) {
-      throw new Error(
-        "Airtable API key and Base ID must be set in environment variables"
-      );
-    }
-
     Airtable.configure({
-      apiKey: apiKey,
+      apiKey: AIRTABLE_CONFIG.apiKey,
     });
 
-    this.base = Airtable.base(baseId);
+    this.base = Airtable.base(AIRTABLE_CONFIG.baseId);
   }
 
   async getAllTables(): Promise<TableSchema[]> {
