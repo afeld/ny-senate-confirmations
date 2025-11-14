@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SenatorsTable from "./components/SenatorsTable";
 import NomineesTable from "./components/NomineesTable";
+import NomineeDetail from "./components/NomineeDetail";
 import "./App.css";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             />
             <Route path="/senators" element={<SenatorsTable />} />
             <Route path="/nominees" element={<NomineesTable />} />
+            <Route path="/nominees/:nomineeId" element={<NomineeDetail />} />
           </Routes>
         </main>
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "gridjs-react";
+import { html } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import AirtableService from "../services/airtable";
 
@@ -13,8 +14,9 @@ const NomineesTable: React.FC = () => {
         const service = new AirtableService();
         const records = await service.getRecordsFromTable("Nominees");
 
-        // Transform records for Grid.js
+        // Transform records for Grid.js with clickable links
         const tableData = records.map((record) => [
+          record.id,
           record.fields["Full Name"] || "",
           record.fields["Year"] || "",
           record.fields["Confirmed?"] || "",
@@ -42,7 +44,25 @@ const NomineesTable: React.FC = () => {
       <h2>Nominees</h2>
       <Grid
         data={data}
-        columns={["Name", "Year", "Confirmed?", "Ayes", "Nays"]}
+        columns={[
+          {
+            id: "id",
+            hidden: true,
+          },
+          {
+            name: "Name",
+            formatter: (cell: any, row: any) => {
+              const id = row.cells[0].data;
+              return html(
+                `<a href="/nominees/${id}" style="color: #3498db; text-decoration: none;">${cell}</a>`
+              );
+            },
+          },
+          "Year",
+          "Confirmed?",
+          "Ayes",
+          "Nays",
+        ]}
         search={true}
         sort={true}
         pagination={{
