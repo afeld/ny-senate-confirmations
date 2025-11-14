@@ -42,7 +42,6 @@ const SenatorsTable: React.FC = () => {
         "District",
         "% Aye",
         "% Nay",
-        "# Votes",
       ]}
       sortByIndex={1}
     />

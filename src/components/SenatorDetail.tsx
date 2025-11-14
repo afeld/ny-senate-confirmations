@@ -85,6 +85,21 @@ const SenatorDetail: React.FC = () => {
       </div>
 
       <div className="nominee-info-card">
+        {senator.fields["Photo"] &&
+          Array.isArray(senator.fields["Photo"]) &&
+          senator.fields["Photo"][0] && (
+            <img
+              src={(senator.fields["Photo"] as any)[0].url}
+              alt={senator.fields["Full Name"] as string}
+              style={{
+                maxWidth: "200px",
+                maxHeight: "200px",
+                borderRadius: "8px",
+                marginBottom: "1rem",
+                objectFit: "cover",
+              }}
+            />
+          )}
         <h1>{senator.fields["Full Name"] as string}</h1>
         <div className="nominee-details">
           {senator.fields["Party"] && (
