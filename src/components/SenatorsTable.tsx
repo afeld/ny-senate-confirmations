@@ -1,11 +1,12 @@
 import React from "react";
-import DataTable from "./DataTable";
+import DataTable, { html } from "./DataTable";
 
 const SenatorsTable: React.FC = () => {
   return (
     <DataTable
       tableName="Senators"
       transformRecord={(record) => [
+        record.id,
         record.fields["Full Name"] || "",
         record.fields["Party"] || "",
         record.fields["District"] || "",
@@ -17,7 +18,27 @@ const SenatorsTable: React.FC = () => {
           : "",
         record.fields["Number of Votes"] || 0,
       ]}
-      columns={["Name", "Party", "District", "% Aye", "% Nay", "# Votes"]}
+      columns={[
+        {
+          id: "id",
+          hidden: true,
+        },
+        {
+          name: "Name",
+          formatter: (cell: any, row: any) => {
+            const id = row.cells[0].data;
+            return html(
+              `<a href="/senators/${id}" class="table-link">${cell}</a>`
+            );
+          },
+        },
+        "Party",
+        "District",
+        "% Aye",
+        "% Nay",
+        "# Votes",
+      ]}
+      sortByIndex={1}
     />
   );
 };
