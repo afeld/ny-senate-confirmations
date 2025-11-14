@@ -92,7 +92,8 @@ const SlateDetail: React.FC = () => {
           )}
           {slate.fields["Slate of Day"] && (
             <div>
-              <strong>Slate of Day:</strong> {String(slate.fields["Slate of Day"])}
+              <strong>Slate of Day:</strong>{" "}
+              {String(slate.fields["Slate of Day"])}
             </div>
           )}
           {slate.fields["Ayes"] !== undefined && (

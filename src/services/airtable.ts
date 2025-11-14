@@ -53,9 +53,7 @@ class AirtableService {
   async getRecordsFromTable(tableName: string): Promise<AirtableRecord[]> {
     try {
       const records: Records<FieldSet> = await this.base(tableName)
-        .select({
-          maxRecords: 100,
-        })
+        .select()
         .all();
 
       return records.map((record) => ({
