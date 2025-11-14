@@ -58,9 +58,15 @@ const NomineeDetail: React.FC = () => {
               </Link>
             </div>
           )}
-          {nominee.fields["Year"] && (
+          {nominee.fields["Slate"] && (
             <div>
-              <strong>Year:</strong> {String(nominee.fields["Year"])}
+              <strong>Slate:</strong>{" "}
+              <Link
+                to={`/slates/${(nominee.fields["Slate"] as string[])[0]}`}
+                className="table-link"
+              >
+                Slate details
+              </Link>
             </div>
           )}
           {nominee.fields["Confirmed?"] && (

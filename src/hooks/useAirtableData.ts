@@ -70,7 +70,9 @@ export const useNomineesTableData = () => {
         const service = new AirtableService();
         const nominees = await service.getRecordsFromTable("Nominees");
         const positions = await service.getRecordsFromTable("Positions");
+        const slates = await service.getRecordsFromTable("Slates");
         const positionsMap = new Map(positions.map((p) => [p.id, p]));
+        const slatesMap = new Map(slates.map((s) => [s.id, s]));
 
         const tableData = nominees.map((record) => {
           const positionIds = record.fields["Position"] as string[] | undefined;
@@ -78,12 +80,18 @@ export const useNomineesTableData = () => {
           const position = positionId ? positionsMap.get(positionId) : null;
           const positionName = position?.fields["Name"] || "";
 
+          const slateIds = record.fields["Slate"] as string[] | undefined;
+          const slateId = slateIds?.[0];
+          const slate = slateId ? slatesMap.get(slateId) : null;
+          const slateDate = slate?.fields["Date"] || "";
+
           return [
             record.id,
             record.fields["Full Name"] || "",
             positionId || "",
             positionName,
-            record.fields["Year"] || "",
+            slateId || "",
+            slateDate,
             record.fields["Confirmed?"] || "",
             record.fields["Ayes"] || 0,
             record.fields["Nays"] || 0,

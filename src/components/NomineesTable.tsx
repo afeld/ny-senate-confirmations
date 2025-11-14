@@ -43,7 +43,20 @@ const NomineesTable: React.FC = () => {
               );
             },
           },
-          "Year",
+          {
+            id: "slateId",
+            hidden: true,
+          },
+          {
+            name: "Slate",
+            formatter: (cell: any, row: any) => {
+              const slateId = row.cells[4].data;
+              if (!slateId || !cell) return "";
+              return html(
+                `<a href="/slates/${slateId}" class="table-link">${cell}</a>`
+              );
+            },
+          },
           {
             name: "Confirmed?",
             formatter: (cell: any) => {
