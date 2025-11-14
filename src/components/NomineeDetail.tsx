@@ -68,12 +68,18 @@ const NomineeDetail: React.FC = () => {
               <strong>Confirmed:</strong>{" "}
               <span
                 className={`confirmed-status ${
-                  nominee.fields["Confirmed?"] === "Yes"
+                  (Array.isArray(nominee.fields["Confirmed?"])
+                    ? nominee.fields["Confirmed?"][0]
+                    : nominee.fields["Confirmed?"]) === "Yes"
                     ? "confirmed-yes"
                     : "confirmed-no"
                 }`}
               >
-                {String(nominee.fields["Confirmed?"])}
+                {String(
+                  Array.isArray(nominee.fields["Confirmed?"])
+                    ? nominee.fields["Confirmed?"][0]
+                    : nominee.fields["Confirmed?"]
+                )}
               </span>
             </div>
           )}
