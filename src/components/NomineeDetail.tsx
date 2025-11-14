@@ -9,10 +9,11 @@ const NomineeDetail: React.FC = () => {
   const { nomineeId } = useParams<{ nomineeId: string }>();
   const { record: nominee, loading } = useRecordById("Nominees", nomineeId);
   const [position, setPosition] = useState<AirtableRecord | null>(null);
+  const [slate, setSlate] = useState<AirtableRecord | null>(null);
   const { votes, loading: votesLoading } = useNomineeVotes(nominee);
 
   useEffect(() => {
-    const loadPosition = async () => {
+    const loadPositionAndSlate = async () => {
       if (!nominee) return;
 
       try {
@@ -23,12 +24,19 @@ const NomineeDetail: React.FC = () => {
           const foundPosition = positions.find((p) => p.id === positionIds[0]);
           setPosition(foundPosition || null);
         }
+
+        const slateIds = nominee.fields["Slate"] as string[] | undefined;
+        if (slateIds && slateIds.length > 0) {
+          const slates = await service.getRecordsFromTable("Slates");
+          const foundSlate = slates.find((s) => s.id === slateIds[0]);
+          setSlate(foundSlate || null);
+        }
       } catch (error) {
-        console.error("Error loading position:", error);
+        console.error("Error loading position and slate:", error);
       }
     };
 
-    loadPosition();
+    loadPositionAndSlate();
   }, [nominee]);
 
   if (loading) {
@@ -58,14 +66,11 @@ const NomineeDetail: React.FC = () => {
               </Link>
             </div>
           )}
-          {nominee.fields["Slate"] && (
+          {slate && (
             <div>
               <strong>Slate:</strong>{" "}
-              <Link
-                to={`/slates/${(nominee.fields["Slate"] as string[])[0]}`}
-                className="table-link"
-              >
-                Slate details
+              <Link to={`/slates/${slate.id}`} className="table-link">
+                {String(slate.fields["Date"])}
               </Link>
             </div>
           )}
