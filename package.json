@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "parcel serve public/index.html --dist-dir build",
-    "build": "parcel build public/index.html public/404.html --dist-dir build --public-url ./",
+    "build": "parcel build public/index.html --dist-dir build --public-url ./",
     "clean": "rm -rf build .parcel-cache"
   },
   "eslintConfig": {

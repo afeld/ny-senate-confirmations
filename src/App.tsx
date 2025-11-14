@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter, Routes, Route, Link } from "react-router-dom";
 import SenatorsTable from "./components/SenatorsTable";
 import NomineesTable from "./components/NomineesTable";
 import SlatesTable from "./components/SlatesTable";
@@ -12,7 +12,8 @@ import "./App.css";
 
 function App() {
   return (
-    <Router>
+    // workaround for GitHub Pages
+    <HashRouter>
       <div className="app-container">
         <header className="app-header">
           <Link to="/" className="app-title">
@@ -53,7 +54,7 @@ function App() {
           </Routes>
         </main>
       </div>
-    </Router>
+    </HashRouter>
   );
 }
 
