@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Grid } from "gridjs-react";
+import { html } from "gridjs";
+import "gridjs/dist/theme/mermaid.css";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 import VotesBySenators from "./VotesBySenators";
 import VoteBar from "./VoteBar";
@@ -8,6 +11,7 @@ const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();
   const [slate, setSlate] = useState<AirtableRecord | null>(null);
   const [votes, setVotes] = useState<any[]>([]);
+  const [nominees, setNominees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,6 +59,39 @@ const SlateDetail: React.FC = () => {
         voteData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
 
         setVotes(voteData);
+
+        // Load nominees for this slate
+        const slateNomineeIds =
+          (foundSlate.fields["Nominees"] as string[] | undefined) || [];
+        const allNominees = await service.getRecordsFromTable("Nominees");
+        const slateNominees = allNominees.filter((n) =>
+          slateNomineeIds.includes(n.id)
+        );
+
+        // Load positions
+        const allPositions = await service.getRecordsFromTable("Positions");
+        const positionsMap = new Map(allPositions.map((p) => [p.id, p]));
+
+        // Transform nominees for display
+        const nomineeData = slateNominees.map((nominee) => {
+          const positionIds =
+            (nominee.fields["Position"] as string[] | undefined) || [];
+          const positionId = positionIds[0];
+          const position = positionId ? positionsMap.get(positionId) : null;
+
+          return [
+            nominee.id,
+            nominee.fields["Full Name"] || "Unknown",
+            position?.fields["Role"] || "",
+            position?.fields["Organization"] || "",
+            positionId,
+          ];
+        });
+
+        // Sort by nominee name
+        nomineeData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+
+        setNominees(nomineeData);
       } catch (error) {
         console.error("Error loading slate details:", error);
       } finally {
@@ -108,6 +145,50 @@ const SlateDetail: React.FC = () => {
           )}
         </div>
       </div>
+
+      <h2>Nominees</h2>
+      {nominees.length === 0 ? (
+        <p>No nominees found for this slate.</p>
+      ) : (
+        <Grid
+          data={nominees}
+          columns={[
+            {
+              id: "id",
+              hidden: true,
+            },
+            {
+              name: "Nominee",
+              formatter: (cell: any, row: any) => {
+                const id = row.cells[0].data;
+                return html(
+                  `<a href="/nominees/${id}" class="table-link">${cell}</a>`
+                );
+              },
+            },
+            {
+              name: "Role",
+              formatter: (cell: any, row: any) => {
+                const positionId = row.cells[4].data;
+                if (!positionId || !cell) return cell;
+                return html(
+                  `<a href="/positions/${positionId}" class="table-link">${cell}</a>`
+                );
+              },
+            },
+            "Organization",
+            {
+              id: "positionId",
+              hidden: true,
+            },
+          ]}
+          search={true}
+          sort={true}
+          pagination={{
+            limit: 20,
+          }}
+        />
+      )}
 
       <h2>Senator Votes</h2>
       <VotesBySenators votes={votes} />
