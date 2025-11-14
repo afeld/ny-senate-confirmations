@@ -26,15 +26,6 @@ const SlateDetail: React.FC = () => {
           return;
         }
 
-        // Load nominees for this slate
-        const nominees = await service.getRecordsFromTable("Nominees");
-        const slateNominees = nominees.filter((nominee) => {
-          const nomineeSlateIds = nominee.fields["Slate"] as
-            | string[]
-            | undefined;
-          return nomineeSlateIds && nomineeSlateIds.includes(slateId!);
-        });
-
         // Load all individual votes for this slate
         const allVotes = await service.getRecordsFromTable("Individual Votes");
         const slateVotes = allVotes.filter((vote) => {
@@ -97,6 +88,11 @@ const SlateDetail: React.FC = () => {
           {slate.fields["Date"] && (
             <div>
               <strong>Date:</strong> {String(slate.fields["Date"])}
+            </div>
+          )}
+          {slate.fields["Slate of Day"] && (
+            <div>
+              <strong>Slate of Day:</strong> {String(slate.fields["Slate of Day"])}
             </div>
           )}
           {slate.fields["Ayes"] !== undefined && (

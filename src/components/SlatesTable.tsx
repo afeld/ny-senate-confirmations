@@ -7,8 +7,8 @@ const SlatesTable: React.FC = () => {
       tableName="Slates"
       transformRecord={(record) => [
         record.id,
-        record.fields["Name"] || "",
         record.fields["Date"] || "",
+        record.fields["Slate of Day"] || "",
         record.fields["Ayes"] || 0,
         record.fields["Nays"] || 0,
       ]}
@@ -18,7 +18,7 @@ const SlatesTable: React.FC = () => {
           hidden: true,
         },
         {
-          name: "Name",
+          name: "Date",
           formatter: (cell: any, row: any) => {
             const id = row.cells[0].data;
             return html(
@@ -26,7 +26,7 @@ const SlatesTable: React.FC = () => {
             );
           },
         },
-        "Date",
+        "Slate of Day",
         "Ayes",
         "Nays",
       ]}
