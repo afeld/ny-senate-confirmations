@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Grid } from "gridjs-react";
-import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import AirtableService, { AirtableRecord } from "../services/airtable";
+import VotesTable from "./VotesTable";
 
 const SenatorDetail: React.FC = () => {
   const { senatorId } = useParams<{ senatorId: string }>();
@@ -134,45 +132,7 @@ const SenatorDetail: React.FC = () => {
       </div>
 
       <h2>Votes on Nominees</h2>
-      {votes.length === 0 ? (
-        <p>No voting data available for this senator.</p>
-      ) : (
-        <Grid
-          data={votes}
-          columns={[
-            {
-              id: "id",
-              hidden: true,
-            },
-            {
-              name: "Nominee",
-              formatter: (cell: any, row: any) => {
-                const id = row.cells[0].data;
-                return html(
-                  `<a href="/nominees/${id}" class="table-link">${cell}</a>`
-                );
-              },
-            },
-            "Year",
-            {
-              name: "Vote",
-              formatter: (cell: any) => {
-                return html(
-                  `<span class="vote-${String(
-                    cell
-                  ).toLowerCase()}">${cell}</span>`
-                );
-              },
-            },
-            "Confirmed?",
-          ]}
-          search={true}
-          sort={true}
-          pagination={{
-            limit: 20,
-          }}
-        />
-      )}
+      <VotesTable votes={votes} showYear={true} showConfirmed={true} />
     </div>
   );
 };

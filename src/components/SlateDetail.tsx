@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Grid } from "gridjs-react";
-import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import AirtableService, { AirtableRecord } from "../services/airtable";
+import VotesTable from "./VotesTable";
 
 const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();
@@ -106,51 +104,7 @@ const SlateDetail: React.FC = () => {
       </div>
 
       <h2>Senator Votes</h2>
-      {votes.length === 0 ? (
-        <p>No voting data available for this slate.</p>
-      ) : (
-        <Grid
-          data={votes}
-          columns={[
-            {
-              id: "id",
-              hidden: true,
-            },
-            {
-              name: "Senator",
-              formatter: (cell: any, row: any) => {
-                const id = row.cells[0].data;
-                return html(
-                  `<a href="/senators/${id}" class="table-link">${cell}</a>`
-                );
-              },
-            },
-            {
-              name: "Party",
-              formatter: (cell: any) => {
-                const party = String(cell).toLowerCase();
-                return html(`<span class="party-${party}">${cell}</span>`);
-              },
-            },
-            "District",
-            {
-              name: "Vote",
-              formatter: (cell: any) => {
-                return html(
-                  `<span class="vote-${String(
-                    cell
-                  ).toLowerCase()}">${cell}</span>`
-                );
-              },
-            },
-          ]}
-          search={true}
-          sort={true}
-          pagination={{
-            limit: 63,
-          }}
-        />
-      )}
+      <VotesTable votes={votes} />
     </div>
   );
 };
