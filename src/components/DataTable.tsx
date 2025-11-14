@@ -6,7 +6,6 @@ import AirtableService from "../services/airtable";
 
 interface DataTableProps {
   tableName: string;
-  title: string;
   columns: Array<
     string | { id?: string; name?: string; hidden?: boolean; formatter?: any }
   >;
@@ -16,7 +15,6 @@ interface DataTableProps {
 
 const DataTable: React.FC<DataTableProps> = ({
   tableName,
-  title,
   columns,
   transformRecord,
   sortByIndex = 0,
@@ -50,12 +48,12 @@ const DataTable: React.FC<DataTableProps> = ({
   }, [tableName, transformRecord, sortByIndex]);
 
   if (loading) {
-    return <div>Loading {title.toLowerCase()}...</div>;
+    return <div>Loading {tableName.toLowerCase()}...</div>;
   }
 
   return (
     <div>
-      <h2>{title}</h2>
+      <h2>{tableName}</h2>
       <Grid
         data={data}
         columns={columns}

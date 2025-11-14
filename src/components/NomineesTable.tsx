@@ -5,7 +5,6 @@ const NomineesTable: React.FC = () => {
   return (
     <DataTable
       tableName="Nominees"
-      title="Nominees"
       sortByIndex={1}
       transformRecord={(record) => [
         record.id,

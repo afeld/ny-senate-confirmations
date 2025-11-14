@@ -5,7 +5,6 @@ const SenatorsTable: React.FC = () => {
   return (
     <DataTable
       tableName="Senators"
-      title="Senators"
       transformRecord={(record) => [
         record.fields["Full Name"] || "",
         record.fields["Party"] || "",
