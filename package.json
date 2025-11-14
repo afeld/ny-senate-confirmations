@@ -13,14 +13,12 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
-    "react-scripts": "5.0.1",
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "start": "NODE_OPTIONS='--no-experimental-webstorage' react-scripts start",
-    "build": "NODE_OPTIONS='--no-experimental-webstorage' react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "parcel serve public/index.html --dist-dir build",
+    "build": "parcel build public/index.html public/404.html --dist-dir build --public-url ./",
+    "clean": "rm -rf build .parcel-cache"
   },
   "eslintConfig": {
     "extends": [
@@ -38,5 +36,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "parcel": "^2.16.1"
   }
 }
