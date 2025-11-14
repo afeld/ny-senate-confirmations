@@ -92,6 +92,80 @@
   color: #7f8c8d;
 }
 
+/* Navigation styles */
+.main-nav {
+  margin-bottom: 2rem;
+}
+
+.nav-link {
+  margin-right: 1rem;
+}
+
+/* Link styles for tables */
+.table-link {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.table-link:hover {
+  text-decoration: underline;
+}
+
+.back-link {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Nominee detail page */
+.nominee-info-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nominee-details {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.confirmed-status {
+  font-weight: bold;
+}
+
+.confirmed-yes {
+  color: #27ae60;
+}
+
+.confirmed-no {
+  color: #e74c3c;
+}
+
+/* Vote colors */
+.vote-aye {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.vote-nay {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.vote-exc,
+.vote-abs,
+.vote-excused,
+.vote-absent {
+  color: #95a5a6;
+  font-weight: bold;
+}
+
 .table-view h2 {
   margin: 0 0 1.5rem 0;
   color: #2c3e50;

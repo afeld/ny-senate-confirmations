@@ -57,7 +57,7 @@ const NomineesTable: React.FC = () => {
             formatter: (cell: any, row: any) => {
               const id = row.cells[0].data;
               return html(
-                `<a href="/nominees/${id}" style="color: #3498db; text-decoration: none;">${cell}</a>`
+                `<a href="/nominees/${id}" class="table-link">${cell}</a>`
               );
             },
           },

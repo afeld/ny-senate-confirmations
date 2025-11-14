@@ -102,26 +102,15 @@ const NomineeDetail: React.FC = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: "1.5rem" }}>
-        <Link
-          to="/nominees"
-          style={{ color: "#3498db", textDecoration: "none" }}
-        >
+      <div className="breadcrumb">
+        <Link to="/nominees" className="back-link">
           ← Back to Nominees
         </Link>
       </div>
 
-      <div
-        style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "8px",
-          marginBottom: "2rem",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        }}
-      >
+      <div className="nominee-info-card">
         <h1>{nominee.fields["Full Name"] as string}</h1>
-        <div style={{ display: "grid", gap: "1rem", marginTop: "1rem" }}>
+        <div className="nominee-details">
           {nominee.fields["Year"] && (
             <div>
               <strong>Year:</strong> {String(nominee.fields["Year"])}
@@ -131,13 +120,11 @@ const NomineeDetail: React.FC = () => {
             <div>
               <strong>Confirmed:</strong>{" "}
               <span
-                style={{
-                  color:
-                    nominee.fields["Confirmed?"] === "Yes"
-                      ? "#27ae60"
-                      : "#e74c3c",
-                  fontWeight: "bold",
-                }}
+                className={`confirmed-status ${
+                  nominee.fields["Confirmed?"] === "Yes"
+                    ? "confirmed-yes"
+                    : "confirmed-no"
+                }`}
               >
                 {String(nominee.fields["Confirmed?"])}
               </span>
@@ -167,7 +154,9 @@ const NomineeDetail: React.FC = () => {
               formatter: (cell: any) => {
                 const color = getVoteColor(String(cell));
                 return html(
-                  `<span style="color: ${color}; font-weight: bold;">${cell}</span>`
+                  `<span class="vote-${String(
+                    cell
+                  ).toLowerCase()}">${cell}</span>`
                 );
               },
             },

@@ -20,8 +20,8 @@ function App() {
               path="/"
               element={
                 <div>
-                  <nav style={{ marginBottom: "2rem" }}>
-                    <Link to="/senators" style={{ marginRight: "1rem" }}>
+                  <nav className="main-nav">
+                    <Link to="/senators" className="nav-link">
                       Senators
                     </Link>
                     <Link to="/nominees">Nominees</Link>
