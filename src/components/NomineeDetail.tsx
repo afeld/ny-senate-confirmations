@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 import { useRecordById, useNomineeVotes } from "../hooks/useAirtableData";
 import VotesBySenators from "./VotesBySenators";

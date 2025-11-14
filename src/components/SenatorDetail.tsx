@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { useRecordById, useSenatorVotes } from "../hooks/useAirtableData";
 import VotesBySlates from "./VotesBySlates";
 import VoteBar from "./VoteBar";

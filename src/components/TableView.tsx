@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router";
 import { AirtableRecord } from "../services/airtable";
 
 interface TableViewProps {

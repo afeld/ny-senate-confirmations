@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 
 interface RecordDetailProps {
