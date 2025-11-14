@@ -7,8 +7,8 @@ const PositionsTable: React.FC = () => {
       tableName="Positions"
       transformRecord={(record) => [
         record.id,
-        record.fields["Name"] || "",
-        record.fields["Agency"] || "",
+        record.fields["Role"] || "",
+        record.fields["Organization"] || "",
       ]}
       columns={[
         {
@@ -16,7 +16,7 @@ const PositionsTable: React.FC = () => {
           hidden: true,
         },
         {
-          name: "Name",
+          name: "Role",
           formatter: (cell: any, row: any) => {
             const id = row.cells[0].data;
             return html(
@@ -24,9 +24,9 @@ const PositionsTable: React.FC = () => {
             );
           },
         },
-        "Agency",
+        "Organization",
       ]}
-      sortByIndex={1}
+      sortByIndex={2}
     />
   );
 };

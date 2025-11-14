@@ -80,14 +80,10 @@ const PositionDetail: React.FC = () => {
       </div>
 
       <div className="nominee-info-card">
-        <h1>{position.fields["Name"] as string}</h1>
-        <div className="nominee-details">
-          {position.fields["Agency"] && (
-            <div>
-              <strong>Agency:</strong> {String(position.fields["Agency"])}
-            </div>
-          )}
-        </div>
+        <h1>
+          {position.fields["Role"] as string},{" "}
+          {position.fields["Organization"] as string}
+        </h1>
       </div>
 
       <h2>Nominees for this Position</h2>
