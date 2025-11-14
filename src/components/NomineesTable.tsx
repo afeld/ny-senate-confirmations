@@ -58,44 +58,44 @@ const NomineesTable: React.FC = () => {
       <Grid
         data={data}
         columns={[
-        {
-          id: "id",
-          hidden: true,
-        },
-        {
-          name: "Name",
-          formatter: (cell: any, row: any) => {
-            const id = row.cells[0].data;
-            return html(
-              `<a href="/nominees/${id}" class="table-link">${cell}</a>`
-            );
+          {
+            id: "id",
+            hidden: true,
           },
-        },
-        {
-          id: "positionId",
-          hidden: true,
-        },
-        {
-          name: "Position",
-          formatter: (cell: any, row: any) => {
-            const positionId = row.cells[2].data;
-            if (!positionId || !cell) return "";
-            return html(
-              `<a href="/positions/${positionId}" class="table-link">${cell}</a>`
-            );
+          {
+            name: "Name",
+            formatter: (cell: any, row: any) => {
+              const id = row.cells[0].data;
+              return html(
+                `<a href="/nominees/${id}" class="table-link">${cell}</a>`
+              );
+            },
           },
-        },
-        "Year",
-        "Confirmed?",
-        "Ayes",
-        "Nays",
-      ]}
-      search={true}
-      sort={true}
-      pagination={{
-        limit: 20,
-      }}
-      fixedHeader={true}
+          {
+            id: "positionId",
+            hidden: true,
+          },
+          {
+            name: "Position",
+            formatter: (cell: any, row: any) => {
+              const positionId = row.cells[2].data;
+              if (!positionId || !cell) return "";
+              return html(
+                `<a href="/positions/${positionId}" class="table-link">${cell}</a>`
+              );
+            },
+          },
+          "Year",
+          "Confirmed?",
+          "Ayes",
+          "Nays",
+        ]}
+        search={true}
+        sort={true}
+        pagination={{
+          limit: 20,
+        }}
+        fixedHeader={true}
       />
     </div>
   );

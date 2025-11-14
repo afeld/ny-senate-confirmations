@@ -28,7 +28,9 @@ const NomineeDetail: React.FC = () => {
         }
 
         // Load position data
-        const positionIds = foundNominee.fields["Position"] as string[] | undefined;
+        const positionIds = foundNominee.fields["Position"] as
+          | string[]
+          | undefined;
         if (positionIds && positionIds.length > 0) {
           const positions = await service.getRecordsFromTable("Positions");
           const foundPosition = positions.find((p) => p.id === positionIds[0]);
@@ -94,21 +96,6 @@ const NomineeDetail: React.FC = () => {
     return <div className="error">Nominee not found</div>;
   }
 
-  const getVoteColor = (vote: string) => {
-    switch (vote) {
-      case "Aye":
-        return "#27ae60";
-      case "Nay":
-        return "#e74c3c";
-      case "Exc":
-        return "#95a5a6";
-      case "Abs":
-        return "#95a5a6";
-      default:
-        return "#000";
-    }
-  };
-
   return (
     <div>
       <div className="breadcrumb">
@@ -169,7 +156,6 @@ const NomineeDetail: React.FC = () => {
             {
               name: "Vote",
               formatter: (cell: any) => {
-                const color = getVoteColor(String(cell));
                 return html(
                   `<span class="vote-${String(
                     cell
