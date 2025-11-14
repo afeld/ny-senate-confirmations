@@ -242,10 +242,10 @@ export const useNomineeVotes = (nominee: AirtableRecord | null) => {
 
   useEffect(() => {
     if (!nominee) {
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
     const loadVotes = async () => {
       try {
         const service = new AirtableService();
