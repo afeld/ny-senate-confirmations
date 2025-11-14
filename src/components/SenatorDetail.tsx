@@ -1,84 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, Link } from "react-router-dom";
-import AirtableService, { AirtableRecord } from "../services/airtable";
+import { useRecordById, useSenatorVotes } from "../hooks/useAirtableData";
 import VotesBySlates from "./VotesBySlates";
 import VoteBar from "./VoteBar";
 
 const SenatorDetail: React.FC = () => {
   const { senatorId } = useParams<{ senatorId: string }>();
-  const [senator, setSenator] = useState<AirtableRecord | null>(null);
-  const [votes, setVotes] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [votesLoading, setVotesLoading] = useState(true);
-
-  useEffect(() => {
-    const loadSenator = async () => {
-      try {
-        const service = new AirtableService();
-
-        // Load senator data
-        const senators = await service.getRecordsFromTable("Senators");
-        const foundSenator = senators.find((s) => s.id === senatorId);
-        setSenator(foundSenator || null);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error loading senator details:", error);
-        setLoading(false);
-      }
-    };
-
-    loadSenator();
-  }, [senatorId]);
-
-  useEffect(() => {
-    const loadVotes = async () => {
-      if (!senator) return;
-
-      try {
-        const service = new AirtableService();
-
-        // Load all individual votes for this senator
-        const allVotes = await service.getRecordsFromTable("Individual Votes");
-        const senatorVotes = allVotes.filter((vote) => {
-          const voteSenatorIds = vote.fields["Senator"] as string[] | undefined;
-          return voteSenatorIds && voteSenatorIds.includes(senatorId!);
-        });
-
-        // Load slates to get slate information
-        const slates = await service.getRecordsFromTable("Slates");
-        const slatesMap = new Map(slates.map((s) => [s.id, s]));
-
-        // Transform votes for display - group by slate
-        const voteData = senatorVotes
-          .map((vote) => {
-            const slateIds = vote.fields["Slate"] as string[] | undefined;
-            const slateId = slateIds?.[0];
-            const slate = slateId ? slatesMap.get(slateId) : null;
-
-            if (!slate) return null;
-
-            return [
-              slateId,
-              slate.fields["Date"] || "",
-              slate.fields["Slate of Day"] || "",
-              vote.fields["Vote"] || "",
-            ];
-          })
-          .filter((v) => v !== null) as any[];
-
-        // Sort by date (descending)
-        voteData.sort((a, b) => String(b[1]).localeCompare(String(a[1])));
-
-        setVotes(voteData);
-      } catch (error) {
-        console.error("Error loading votes:", error);
-      } finally {
-        setVotesLoading(false);
-      }
-    };
-
-    loadVotes();
-  }, [senator, senatorId]);
+  const { record: senator, loading } = useRecordById("Senators", senatorId);
+  const { votes, loading: votesLoading } = useSenatorVotes(senatorId);
 
   if (loading) {
     return <div className="loading">Loading senator details...</div>;

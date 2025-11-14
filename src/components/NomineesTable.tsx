@@ -1,51 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { html } from "gridjs";
-import AirtableService from "../services/airtable";
+import { useNomineesTableData } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
 
 const NomineesTable: React.FC = () => {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const service = new AirtableService();
-        const nominees = await service.getRecordsFromTable("Nominees");
-        const positions = await service.getRecordsFromTable("Positions");
-        const positionsMap = new Map(positions.map((p) => [p.id, p]));
-
-        const tableData = nominees.map((record) => {
-          const positionIds = record.fields["Position"] as string[] | undefined;
-          const positionId = positionIds?.[0];
-          const position = positionId ? positionsMap.get(positionId) : null;
-          const positionName = position?.fields["Name"] || "";
-
-          return [
-            record.id,
-            record.fields["Full Name"] || "",
-            positionId || "",
-            positionName,
-            record.fields["Year"] || "",
-            record.fields["Confirmed?"] || "",
-            record.fields["Ayes"] || 0,
-            record.fields["Nays"] || 0,
-          ];
-        });
-
-        // Sort by name (index 1)
-        tableData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
-
-        setData(tableData);
-      } catch (error) {
-        console.error("Error loading nominees:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
+  const { data, loading } = useNomineesTableData();
 
   if (loading) {
     return <div>Loading nominees...</div>;
