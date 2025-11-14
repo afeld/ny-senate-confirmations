@@ -3,17 +3,15 @@
  * @param type - The type of record (senators, nominees, slates, positions)
  * @param id - The record ID
  * @param text - The link text to display
- * @param className - Optional CSS class name (defaults to "table-link")
  * @returns HTML string for the link
  */
 export function createTableLink(
   type: string,
   id: string,
-  text: string,
-  className: string = "table-link"
+  text: string
 ): string {
   // use hash-based routing
-  return `<a href="#/${type}/${id}" class="${className}">${text}</a>`;
+  return `<a href="#/${type}/${id}">${text}</a>`;
 }
 
 /**
