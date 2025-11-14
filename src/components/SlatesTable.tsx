@@ -1,17 +1,88 @@
-import React from "react";
-import DataTable, { html } from "./DataTable";
+import React, { useEffect, useState } from "react";
+import { Grid } from "gridjs-react";
+import { html } from "gridjs";
+import "gridjs/dist/theme/mermaid.css";
+import AirtableService from "../services/airtable";
 
 const SlatesTable: React.FC = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const service = new AirtableService();
+        const slates = await service.getRecordsFromTable("Slates");
+        const positions = await service.getRecordsFromTable("Positions");
+
+        const positionsMap = new Map(
+          positions.map((p) => [
+            p.id,
+            {
+              role: p.fields["Role"] as string,
+              org: p.fields["Organization"] as string,
+            },
+          ])
+        );
+
+        const tableData = slates.map((record) => {
+          const positionIds =
+            (record.fields["Position(s)"] as string[] | undefined) || [];
+          const uniquePositionIds = [...new Set(positionIds)];
+
+          // Create array of position data for sorting
+          const positionData = uniquePositionIds
+            .map((id) => {
+              const position = positionsMap.get(id);
+              if (!position) return null;
+              return { id, role: position.role, org: position.org };
+            })
+            .filter((p) => p !== null);
+
+          // Sort by organization
+          positionData.sort((a, b) => a!.org.localeCompare(b!.org));
+
+          // Create links separated by line breaks
+          const positionLinks = positionData
+            .map(
+              (p) =>
+                `<a href="/positions/${p!.id}" class="table-link">${p!.role}, ${
+                  p!.org
+                }</a>`
+            )
+            .join("<br>");
+
+          return [
+            record.id,
+            record.fields["Date"] || "",
+            record.fields["Slate of Day"] || "",
+            positionLinks || "",
+            record.fields["Ayes"] || 0,
+            record.fields["Nays"] || 0,
+          ];
+        });
+
+        // Sort by date descending
+        tableData.sort((a, b) => String(b[1]).localeCompare(String(a[1])));
+
+        setData(tableData);
+      } catch (error) {
+        console.error("Error loading slates:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Loading slates...</div>;
+  }
+
   return (
-    <DataTable
-      tableName="Slates"
-      transformRecord={(record) => [
-        record.id,
-        record.fields["Date"] || "",
-        record.fields["Slate of Day"] || "",
-        record.fields["Ayes"] || 0,
-        record.fields["Nays"] || 0,
-      ]}
+    <Grid
+      data={data}
       columns={[
         {
           id: "id",
@@ -27,10 +98,18 @@ const SlatesTable: React.FC = () => {
           },
         },
         "Slate of Day",
+        {
+          name: "Positions",
+          formatter: (cell: any) => html(cell),
+        },
         "Ayes",
         "Nays",
       ]}
-      sortByIndex={1}
+      search={true}
+      sort={true}
+      pagination={{
+        limit: 20,
+      }}
     />
   );
 };
