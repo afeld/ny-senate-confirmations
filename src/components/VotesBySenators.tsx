@@ -60,7 +60,19 @@ const VotesBySenators: React.FC<VotesBySenatorProps> = ({
     });
 
     if (showConfirmed) {
-      columns.push("Confirmed?");
+      columns.push({
+        name: "Confirmed?",
+        formatter: (cell: any) => {
+          const value = Array.isArray(cell) ? cell[0] : cell;
+          const className =
+            value === "Yes"
+              ? "confirmed-yes"
+              : value === "No"
+              ? "confirmed-no"
+              : "";
+          return html(`<span class="${className}">${value}</span>`);
+        },
+      });
     }
 
     return columns;

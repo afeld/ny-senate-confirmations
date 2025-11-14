@@ -139,12 +139,18 @@
   font-weight: bold;
 }
 
-.confirmed-yes {
-  color: #27ae60;
+.confirmed-yes,
+td .confirmed-yes,
+.gridjs-td .confirmed-yes {
+  color: #27ae60 !important;
+  font-weight: bold;
 }
 
-.confirmed-no {
-  color: #e74c3c;
+.confirmed-no,
+td .confirmed-no,
+.gridjs-td .confirmed-no {
+  color: #e74c3c !important;
+  font-weight: bold;
 }
 
 /* Vote colors */

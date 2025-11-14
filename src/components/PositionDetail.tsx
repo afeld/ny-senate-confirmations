@@ -107,7 +107,19 @@ const PositionDetail: React.FC = () => {
               },
             },
             "Year",
-            "Confirmed?",
+            {
+              name: "Confirmed?",
+              formatter: (cell: any) => {
+                const value = Array.isArray(cell) ? cell[0] : cell;
+                const className =
+                  value === "Yes"
+                    ? "confirmed-yes"
+                    : value === "No"
+                    ? "confirmed-no"
+                    : "";
+                return html(`<span class="${className}">${value}</span>`);
+              },
+            },
             "Ayes",
             "Nays",
           ]}
