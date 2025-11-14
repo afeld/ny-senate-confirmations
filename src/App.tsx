@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SenatorsTable from "./components/SenatorsTable";
 import NomineesTable from "./components/NomineesTable";
 import SlatesTable from "./components/SlatesTable";
