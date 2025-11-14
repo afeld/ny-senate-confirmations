@@ -12,7 +12,8 @@ export function createTableLink(
   text: string,
   className: string = "table-link"
 ): string {
-  return `<a href="/${type}/${id}" class="${className}">${text}</a>`;
+  // use hash-based routing
+  return `<a href="#/${type}/${id}" class="${className}">${text}</a>`;
 }
 
 /**
