@@ -37,11 +37,11 @@ class AirtableService {
     // Alternatively, use the Airtable Metadata API if you have access
 
     const tableNames: string[] = [
-      'Senators',
-      'Nominees',
-      'Positions',
-      'Slates',
-      'Individual Votes',
+      "Senators",
+      "Nominees",
+      "Positions",
+      "Slates",
+      "Individual Votes",
     ];
 
     return tableNames.map((name, index) => ({
@@ -55,7 +55,6 @@ class AirtableService {
       const records: Records<FieldSet> = await this.base(tableName)
         .select({
           maxRecords: 100,
-          view: "Grid view", // Adjust as needed
         })
         .all();
 
@@ -66,6 +65,7 @@ class AirtableService {
       }));
     } catch (error) {
       console.error(`Error fetching records from ${tableName}:`, error);
+      console.error("Full error:", error);
       throw error;
     }
   }
@@ -92,11 +92,14 @@ class AirtableService {
 
   async getAllData(): Promise<Map<string, AirtableRecord[]>> {
     const tables = await this.getAllTables();
+    console.log("Tables to fetch:", tables);
     const dataMap = new Map<string, AirtableRecord[]>();
 
     for (const table of tables) {
       try {
+        console.log(`Fetching records for table: ${table.name}`);
         const records = await this.getRecordsFromTable(table.name);
+        console.log(`Got ${records.length} records for ${table.name}`);
         dataMap.set(table.name, records);
       } catch (error) {
         console.error(`Failed to fetch data for table ${table.name}:`, error);
@@ -104,6 +107,7 @@ class AirtableService {
       }
     }
 
+    console.log("Final data map:", dataMap);
     return dataMap;
   }
 
@@ -118,8 +122,8 @@ class AirtableService {
     allData: Map<string, AirtableRecord[]>
   ): Promise<AirtableRecord | null> {
     // Search through all tables to find the record
-    for (const [tableName, records] of allData.entries()) {
-      const found = records.find((r) => r.id === recordId);
+    for (const records of Array.from(allData.values())) {
+      const found = records.find((r: AirtableRecord) => r.id === recordId);
       if (found) {
         return found;
       }

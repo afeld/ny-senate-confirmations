@@ -16,15 +16,19 @@ function App() {
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadData = async () => {
     try {
       setLoading(true);
       setError(null);
+      console.log("Loading Airtable data...");
       const data = await airtableService.getAllData();
+      console.log("Data loaded:", data);
       setAllData(data);
     } catch (err) {
+      console.error("Error loading data:", err);
       setError(err instanceof Error ? err.message : "Failed to load data");
     } finally {
       setLoading(false);

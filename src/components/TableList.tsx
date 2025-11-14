@@ -7,7 +7,9 @@ interface TableListProps {
 }
 
 const TableList: React.FC<TableListProps> = ({ allData }) => {
+  console.log("TableList received allData:", allData);
   const tables = Array.from(allData.keys());
+  console.log("Tables array:", tables);
 
   if (tables.length === 0) {
     return (

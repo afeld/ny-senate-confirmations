@@ -24,13 +24,14 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
     if (tableName && recordId) {
       const decodedTableName = decodeURIComponent(tableName);
       const records = allData.get(decodedTableName) || [];
-      const found = records.find((r) => r.id === recordId);
+      const found = records.find((r: AirtableRecord) => r.id === recordId);
 
       if (found) {
         setRecord(found);
         loadLinkedRecords(found);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableName, recordId, allData]);
 
   const loadLinkedRecords = async (rec: AirtableRecord) => {
