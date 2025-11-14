@@ -2,6 +2,8 @@ import React from "react";
 import DataTable, { html } from "./DataTable";
 import { linkGenerators } from "../utils/linkHelpers";
 
+const toPercent = (val: number) => `${Math.round(val * 100)}%`;
+
 const SenatorsTable: React.FC = () => {
   return (
     <DataTable
@@ -11,12 +13,8 @@ const SenatorsTable: React.FC = () => {
         record.fields["Full Name"] || "",
         record.fields["Party"] || "",
         record.fields["District"] || "",
-        record.fields["% Aye"]
-          ? `${Math.round((record.fields["% Aye"] as number) * 100)}%`
-          : "",
-        record.fields["% Nay"]
-          ? `${Math.round((record.fields["% Nay"] as number) * 100)}%`
-          : "",
+        toPercent(record.fields["% Aye"] || 0),
+        toPercent(record.fields["% Nay"] || 0),
         record.fields["Number of Votes"] || 0,
       ]}
       columns={[
