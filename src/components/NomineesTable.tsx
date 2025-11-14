@@ -47,14 +47,13 @@ const NomineesTable: React.FC = () => {
           {
             name: "Confirmed?",
             formatter: (cell: any) => {
-              const value = Array.isArray(cell) ? cell[0] : cell;
               const className =
-                value === "Yes"
+                cell === "Yes"
                   ? "confirmed-yes"
-                  : value === "No"
+                  : cell === "No"
                   ? "confirmed-no"
                   : "";
-              return html(`<span class="${className}">${value}</span>`);
+              return html(`<span class="${className}">${cell}</span>`);
             },
           },
           "Ayes",

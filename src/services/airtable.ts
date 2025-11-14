@@ -50,6 +50,29 @@ class AirtableService {
     }));
   }
 
+  private normalizeSingleSelectFields(
+    fields: FieldSet,
+    tableName: string
+  ): FieldSet {
+    const singleSelectFields: { [table: string]: string[] } = {
+      Nominees: ["Confirmed?"],
+      "Individual Votes": ["Vote"],
+      Senators: ["Party"],
+    };
+
+    const fieldsToNormalize = singleSelectFields[tableName] || [];
+    const normalizedFields = { ...fields };
+
+    fieldsToNormalize.forEach((fieldName) => {
+      const value = normalizedFields[fieldName];
+      if (Array.isArray(value) && value.length > 0) {
+        normalizedFields[fieldName] = value[0];
+      }
+    });
+
+    return normalizedFields;
+  }
+
   async getRecordsFromTable(tableName: string): Promise<AirtableRecord[]> {
     try {
       const records: Records<FieldSet> = await this.base(tableName)
@@ -58,7 +81,7 @@ class AirtableService {
 
       return records.map((record) => ({
         id: record.id,
-        fields: record.fields,
+        fields: this.normalizeSingleSelectFields(record.fields, tableName),
         tableName: tableName,
       }));
     } catch (error) {
@@ -76,7 +99,7 @@ class AirtableService {
       const record = await this.base(tableName).find(recordId);
       return {
         id: record.id,
-        fields: record.fields,
+        fields: this.normalizeSingleSelectFields(record.fields, tableName),
         tableName: tableName,
       };
     } catch (error) {
