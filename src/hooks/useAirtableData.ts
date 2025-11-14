@@ -188,10 +188,10 @@ export const useSenatorVotes = (senatorId: string | undefined) => {
 
   useEffect(() => {
     if (!senatorId) {
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
     const loadVotes = async () => {
       try {
         const service = new AirtableService();
@@ -309,10 +309,10 @@ export const useSlateVotes = (
 
   useEffect(() => {
     if (!slate) {
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
     const loadVotes = async () => {
       try {
         const service = new AirtableService();
@@ -366,10 +366,10 @@ export const useSlateNominees = (
 
   useEffect(() => {
     if (!slate) {
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
     const loadNominees = async () => {
       try {
         const service = new AirtableService();
@@ -425,10 +425,10 @@ export const usePositionNominees = (
 
   useEffect(() => {
     if (!position) {
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
     const loadNominees = async () => {
       try {
         const service = new AirtableService();
