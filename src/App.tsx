@@ -1,56 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import AirtableService, { AirtableRecord } from "./services/airtable";
-import TableList from "./components/TableList";
-import TableView from "./components/TableView";
-import RecordDetail from "./components/RecordDetail";
+import SenatorsTable from "./components/SenatorsTable";
+import NomineesTable from "./components/NomineesTable";
 import "./App.css";
 
 function App() {
-  const [airtableService] = useState(() => new AirtableService());
-  const [allData, setAllData] = useState<Map<string, AirtableRecord[]>>(
-    new Map()
-  );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log("Loading Airtable data...");
-      const data = await airtableService.getAllData();
-      console.log("Data loaded:", data);
-      setAllData(data);
-    } catch (err) {
-      console.error("Error loading data:", err);
-      setError(err instanceof Error ? err.message : "Failed to load data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="app-container">
-        <div className="loading">Loading Airtable data...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="app-container">
-        <div className="error">Error: {error}</div>
-      </div>
-    );
-  }
-
   return (
     <Router>
       <div className="app-container">
@@ -61,20 +15,23 @@ function App() {
         </header>
         <main className="app-main">
           <Routes>
-            <Route path="/" element={<TableList allData={allData} />} />
             <Route
-              path="/table/:tableName"
-              element={<TableView allData={allData} />}
-            />
-            <Route
-              path="/table/:tableName/record/:recordId"
+              path="/"
               element={
-                <RecordDetail
-                  allData={allData}
-                  airtableService={airtableService}
-                />
+                <div>
+                  <nav style={{ marginBottom: "2rem" }}>
+                    <Link to="/senators" style={{ marginRight: "1rem" }}>
+                      Senators
+                    </Link>
+                    <Link to="/nominees">Nominees</Link>
+                  </nav>
+                  <h1>Senate Confirmations</h1>
+                  <p>Select a table from the navigation above.</p>
+                </div>
               }
             />
+            <Route path="/senators" element={<SenatorsTable />} />
+            <Route path="/nominees" element={<NomineesTable />} />
           </Routes>
         </main>
       </div>

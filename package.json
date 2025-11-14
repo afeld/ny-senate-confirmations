@@ -7,6 +7,8 @@
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
     "airtable": "^0.12.2",
+    "gridjs": "^6.2.0",
+    "gridjs-react": "^6.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",

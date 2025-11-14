@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 
@@ -16,50 +16,83 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
     recordId: string;
   }>();
   const [record, setRecord] = useState<AirtableRecord | null>(null);
-  const [linkedRecordsData, setLinkedRecordsData] = useState<
-    Map<string, AirtableRecord[]>
-  >(new Map());
+  const [linkedRecordsData, setLinkedRecordsData] = useState<{
+    [key: string]: AirtableRecord[];
+  }>({});
+  const [linkedRecordsLoaded, setLinkedRecordsLoaded] = useState(false);
+  const [renderKey, setRenderKey] = useState(0);
 
-  useEffect(() => {
-    if (tableName && recordId) {
-      const decodedTableName = decodeURIComponent(tableName);
-      const records = allData.get(decodedTableName) || [];
-      const found = records.find((r: AirtableRecord) => r.id === recordId);
+  const loadLinkedRecords = useCallback(
+    async (rec: AirtableRecord) => {
+      const linkedObj: { [key: string]: AirtableRecord[] } = {};
 
-      if (found) {
-        setRecord(found);
-        loadLinkedRecords(found);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableName, recordId, allData]);
+      for (const [fieldName, fieldValue] of Object.entries(rec.fields)) {
+        if (airtableService.isLinkedRecord(fieldValue)) {
+          console.log(`Found linked record field: ${fieldName}`, fieldValue);
+          const recordIds = fieldValue as string[];
+          const linkedRecords: AirtableRecord[] = [];
 
-  const loadLinkedRecords = async (rec: AirtableRecord) => {
-    const linkedMap = new Map<string, AirtableRecord[]>();
+          for (const linkedId of recordIds) {
+            const linkedRecord = await airtableService.resolveLinkedRecord(
+              linkedId,
+              allData
+            );
+            if (linkedRecord) {
+              linkedRecords.push(linkedRecord);
+            }
+          }
 
-    for (const [fieldName, fieldValue] of Object.entries(rec.fields)) {
-      if (airtableService.isLinkedRecord(fieldValue)) {
-        const recordIds = fieldValue as string[];
-        const linkedRecords: AirtableRecord[] = [];
-
-        for (const linkedId of recordIds) {
-          const linkedRecord = await airtableService.resolveLinkedRecord(
-            linkedId,
-            allData
-          );
-          if (linkedRecord) {
-            linkedRecords.push(linkedRecord);
+          if (linkedRecords.length > 0) {
+            console.log(
+              `Resolved ${linkedRecords.length} linked records for ${fieldName}`
+            );
+            linkedObj[fieldName] = linkedRecords;
           }
         }
+      }
 
-        if (linkedRecords.length > 0) {
-          linkedMap.set(fieldName, linkedRecords);
+      console.log("Final linkedRecordsData:", linkedObj);
+      console.log("About to call setLinkedRecordsData with:", linkedObj);
+      console.log("linkedObj keys:", Object.keys(linkedObj));
+
+      // Force a new object reference
+      const newLinkedData = { ...linkedObj };
+      console.log("Calling setState with:", newLinkedData);
+      setLinkedRecordsData(newLinkedData);
+      console.log("State set, calling setLinkedRecordsLoaded");
+      setLinkedRecordsLoaded(true);
+      console.log("Calling setRenderKey");
+      setRenderKey((prev) => prev + 1); // Force re-render
+      console.log("All state updates called");
+    },
+    [allData, airtableService]
+  );
+
+  useEffect(() => {
+    const loadRecordAndLinks = async () => {
+      console.log("useEffect running for", tableName, recordId);
+      if (tableName && recordId) {
+        // Reset state
+        setLinkedRecordsData({});
+        setLinkedRecordsLoaded(false);
+
+        const decodedTableName = decodeURIComponent(tableName);
+        const records = allData.get(decodedTableName) || [];
+        const found = records.find((r: AirtableRecord) => r.id === recordId);
+
+        if (found) {
+          console.log("Found record, setting it");
+          setRecord(found);
+          console.log("Now loading linked records");
+          await loadLinkedRecords(found);
+          console.log("Finished loading linked records");
         }
       }
-    }
+    };
 
-    setLinkedRecordsData(linkedMap);
-  };
+    loadRecordAndLinks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableName, recordId, allData, loadLinkedRecords]);
 
   if (!tableName || !recordId) {
     return <div className="error">Invalid record URL</div>;
@@ -71,17 +104,26 @@ const RecordDetail: React.FC<RecordDetailProps> = ({
 
   const decodedTableName = decodeURIComponent(tableName);
 
+  console.log("Current linkedRecordsData state:", linkedRecordsData);
+  console.log("linkedRecordsLoaded:", linkedRecordsLoaded);
+
   const renderFieldValue = (fieldName: string, fieldValue: any) => {
     if (fieldValue === null || fieldValue === undefined) {
       return <span className="field-value">—</span>;
     }
 
     // Check if this is a linked record field
-    const linkedRecords = linkedRecordsData.get(fieldName);
+    const linkedRecords = linkedRecordsData[fieldName];
+    console.log(`Rendering ${fieldName}, has linkedRecords:`, linkedRecords);
+    console.log("Full linkedRecordsData object:", linkedRecordsData);
     if (linkedRecords && linkedRecords.length > 0) {
+      console.log(
+        `Rendering ${linkedRecords.length} linked records for ${fieldName}`
+      );
+
       return (
         <div className="linked-records">
-          {linkedRecords.map((linkedRecord) => {
+          {linkedRecords.map((linkedRecord: AirtableRecord) => {
             const displayText = getRecordDisplayName(linkedRecord);
             return (
               <Link
