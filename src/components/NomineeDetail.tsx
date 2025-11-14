@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 import VotesBySenators from "./VotesBySenators";
+import VoteBar from "./VoteBar";
 
 const NomineeDetail: React.FC = () => {
   const { nomineeId } = useParams<{ nomineeId: string }>();
@@ -135,8 +136,13 @@ const NomineeDetail: React.FC = () => {
           )}
           {nominee.fields["Ayes"] !== undefined && (
             <div>
-              <strong>Ayes:</strong> {String(nominee.fields["Ayes"])} |{" "}
-              <strong>Nays:</strong> {String(nominee.fields["Nays"] || 0)}
+              <strong>Votes:</strong>
+              <VoteBar
+                ayes={Number(nominee.fields["Ayes"] || 0)}
+                nays={Number(nominee.fields["Nays"] || 0)}
+                abs={Number(nominee.fields["Abs"] || 0)}
+                exc={Number(nominee.fields["Exc"] || 0)}
+              />
             </div>
           )}
         </div>

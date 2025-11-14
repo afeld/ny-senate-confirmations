@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 import VotesBySenators from "./VotesBySenators";
+import VoteBar from "./VoteBar";
 
 const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();
@@ -96,8 +97,13 @@ const SlateDetail: React.FC = () => {
           )}
           {slate.fields["Ayes"] !== undefined && (
             <div>
-              <strong>Ayes:</strong> {String(slate.fields["Ayes"])} |{" "}
-              <strong>Nays:</strong> {String(slate.fields["Nays"] || 0)}
+              <strong>Votes:</strong>
+              <VoteBar
+                ayes={Number(slate.fields["Ayes"] || 0)}
+                nays={Number(slate.fields["Nays"] || 0)}
+                abs={Number(slate.fields["Abs"] || 0)}
+                exc={Number(slate.fields["Exc"] || 0)}
+              />
             </div>
           )}
         </div>
