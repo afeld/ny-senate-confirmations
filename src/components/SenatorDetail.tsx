@@ -101,7 +101,14 @@ const SenatorDetail: React.FC = () => {
         <div className="nominee-details">
           {senator.fields["Party"] && (
             <div>
-              <strong>Party:</strong> {String(senator.fields["Party"])}
+              <strong>Party:</strong>{" "}
+              <span
+                className={`party-${String(
+                  senator.fields["Party"]
+                ).toLowerCase()}`}
+              >
+                {String(senator.fields["Party"])}
+              </span>
             </div>
           )}
           {senator.fields["District"] && (

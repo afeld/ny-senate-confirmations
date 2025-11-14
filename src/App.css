@@ -166,6 +166,25 @@
   font-weight: bold;
 }
 
+/* Party colors */
+.party-d,
+.party-democrat {
+  color: #2e5cb8;
+  font-weight: 500;
+}
+
+.party-r,
+.party-republican {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.party-i,
+.party-independent {
+  color: #7b1fa2;
+  font-weight: 500;
+}
+
 .table-view h2 {
   margin: 0 0 1.5rem 0;
   color: #2c3e50;

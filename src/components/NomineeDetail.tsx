@@ -165,7 +165,13 @@ const NomineeDetail: React.FC = () => {
                 );
               },
             },
-            "Party",
+            {
+              name: "Party",
+              formatter: (cell: any) => {
+                const party = String(cell).toLowerCase();
+                return html(`<span class="party-${party}">${cell}</span>`);
+              },
+            },
             "District",
             {
               name: "Vote",
