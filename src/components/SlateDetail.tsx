@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { html } from "gridjs";
+import { linkGenerators } from "../utils/linkHelpers";
 import {
   useRecordById,
   useSlateVotes,
@@ -80,9 +81,7 @@ const SlateDetail: React.FC = () => {
               name: "Nominee",
               formatter: (cell: any, row: any) => {
                 const id = row.cells[0].data;
-                return html(
-                  `<a href="/nominees/${id}" class="table-link">${cell}</a>`
-                );
+                return html(linkGenerators.nominee(id, cell));
               },
             },
             {
@@ -90,9 +89,7 @@ const SlateDetail: React.FC = () => {
               formatter: (cell: any, row: any) => {
                 const positionId = row.cells[4].data;
                 if (!positionId || !cell) return cell;
-                return html(
-                  `<a href="/positions/${positionId}" class="table-link">${cell}</a>`
-                );
+                return html(linkGenerators.position(positionId, cell));
               },
             },
             "Organization",

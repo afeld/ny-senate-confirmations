@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { html } from "gridjs";
 import { useRecordById, usePositionNominees } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
+import { linkGenerators } from "../utils/linkHelpers";
 
 const PositionDetail: React.FC = () => {
   const { positionId } = useParams<{ positionId: string }>();
@@ -52,9 +53,7 @@ const PositionDetail: React.FC = () => {
               name: "Nominee",
               formatter: (cell: any, row: any) => {
                 const id = row.cells[0].data;
-                return html(
-                  `<a href="/nominees/${id}" class="table-link">${cell}</a>`
-                );
+                return html(linkGenerators.nominee(id, cell));
               },
             },
             "Year",

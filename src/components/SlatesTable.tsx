@@ -2,6 +2,7 @@ import React from "react";
 import { html } from "gridjs";
 import { useSlatesTableData } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
+import { linkGenerators } from "../utils/linkHelpers";
 
 const SlatesTable: React.FC = () => {
   const { data, loading } = useSlatesTableData();
@@ -22,9 +23,7 @@ const SlatesTable: React.FC = () => {
           name: "Date",
           formatter: (cell: any, row: any) => {
             const id = row.cells[0].data;
-            return html(
-              `<a href="/slates/${id}" class="table-link">${cell}</a>`
-            );
+            return html(linkGenerators.slate(id, cell));
           },
         },
         "Slate of Day",

@@ -2,6 +2,7 @@ import React from "react";
 import { html } from "gridjs";
 import { useNomineesTableData } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
+import { linkGenerators } from "../utils/linkHelpers";
 
 const NomineesTable: React.FC = () => {
   const { data, loading } = useNomineesTableData();
@@ -24,9 +25,7 @@ const NomineesTable: React.FC = () => {
             name: "Name",
             formatter: (cell: any, row: any) => {
               const id = row.cells[0].data;
-              return html(
-                `<a href="/nominees/${id}" class="table-link">${cell}</a>`
-              );
+              return html(linkGenerators.nominee(id, cell));
             },
           },
           {
@@ -38,9 +37,7 @@ const NomineesTable: React.FC = () => {
             formatter: (cell: any, row: any) => {
               const positionId = row.cells[2].data;
               if (!positionId || !cell) return "";
-              return html(
-                `<a href="/positions/${positionId}" class="table-link">${cell}</a>`
-              );
+              return html(linkGenerators.position(positionId, cell));
             },
           },
           {
@@ -52,9 +49,7 @@ const NomineesTable: React.FC = () => {
             formatter: (cell: any, row: any) => {
               const slateId = row.cells[4].data;
               if (!slateId || !cell) return "";
-              return html(
-                `<a href="/slates/${slateId}" class="table-link">${cell}</a>`
-              );
+              return html(linkGenerators.slate(slateId, cell));
             },
           },
           {

@@ -1,5 +1,6 @@
 import React from "react";
 import DataTable, { html } from "./DataTable";
+import { linkGenerators } from "../utils/linkHelpers";
 
 const SenatorsTable: React.FC = () => {
   return (
@@ -27,9 +28,7 @@ const SenatorsTable: React.FC = () => {
           name: "Name",
           formatter: (cell: any, row: any) => {
             const id = row.cells[0].data;
-            return html(
-              `<a href="/senators/${id}" class="table-link">${cell}</a>`
-            );
+            return html(linkGenerators.senator(id, cell));
           },
         },
         {

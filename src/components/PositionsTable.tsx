@@ -1,5 +1,6 @@
 import React from "react";
 import DataTable, { html } from "./DataTable";
+import { linkGenerators } from "../utils/linkHelpers";
 
 const PositionsTable: React.FC = () => {
   return (
@@ -19,9 +20,7 @@ const PositionsTable: React.FC = () => {
           name: "Role",
           formatter: (cell: any, row: any) => {
             const id = row.cells[0].data;
-            return html(
-              `<a href="/positions/${id}" class="table-link">${cell}</a>`
-            );
+            return html(linkGenerators.position(id, cell));
           },
         },
         "Organization",

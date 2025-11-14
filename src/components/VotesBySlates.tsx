@@ -1,6 +1,7 @@
 import React from "react";
 import { html } from "gridjs";
 import TableGrid from "./TableGrid";
+import { linkGenerators } from "../utils/linkHelpers";
 
 interface VotesBySlatesProps {
   votes: any[];
@@ -21,7 +22,7 @@ const VotesBySlates: React.FC<VotesBySlatesProps> = ({ votes }) => {
       formatter: (cell: any, row: any) => {
         const id = row.cells[0].data;
         if (!id) return cell;
-        return html(`<a href="/slates/${id}" class="table-link">${cell}</a>`);
+        return html(linkGenerators.slate(id, cell));
       },
     },
     "Slate of Day",

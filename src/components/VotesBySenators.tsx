@@ -1,6 +1,7 @@
 import React from "react";
 import { html } from "gridjs";
 import TableGrid from "./TableGrid";
+import { linkGenerators } from "../utils/linkHelpers";
 
 interface VotesBySenatorProps {
   votes: any[];
@@ -21,7 +22,7 @@ const VotesBySenators: React.FC<VotesBySenatorProps> = ({ votes }) => {
       formatter: (cell: any, row: any) => {
         const id = row.cells[0].data;
         if (!id) return cell;
-        return html(`<a href="/senators/${id}" class="table-link">${cell}</a>`);
+        return html(linkGenerators.senator(id, cell));
       },
     },
     {

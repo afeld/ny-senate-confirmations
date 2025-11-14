@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AirtableService, { AirtableRecord } from "../services/airtable";
+import { linkGenerators } from "../utils/linkHelpers";
 
 export const useTableData = (tableName: string) => {
   const [data, setData] = useState<AirtableRecord[]>([]);
@@ -155,12 +156,7 @@ export const useSlatesTableData = () => {
 
           // Create links separated by line breaks
           const positionLinks = positionData
-            .map(
-              (p) =>
-                `<a href="/positions/${p!.id}" class="table-link">${p!.role}, ${
-                  p!.org
-                }</a>`
-            )
+            .map((p) => linkGenerators.position(p!.id, `${p!.role}, ${p!.org}`))
             .join("<br>");
 
           return [
