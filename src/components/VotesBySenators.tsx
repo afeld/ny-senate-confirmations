@@ -5,88 +5,50 @@ import "gridjs/dist/theme/mermaid.css";
 
 interface VotesBySenatorProps {
   votes: any[];
-  showYear?: boolean;
-  showConfirmed?: boolean;
 }
 
-const VotesBySenators: React.FC<VotesBySenatorProps> = ({
-  votes,
-  showYear = false,
-  showConfirmed = false,
-}) => {
+const VotesBySenators: React.FC<VotesBySenatorProps> = ({ votes }) => {
   if (votes.length === 0) {
     return <p>No voting data available.</p>;
   }
 
-  const buildColumns = () => {
-    const columns: any[] = [
-      {
-        id: "id",
-        hidden: true,
+  const columns = [
+    {
+      id: "id",
+      hidden: true,
+    },
+    {
+      name: "Senator",
+      formatter: (cell: any, row: any) => {
+        const id = row.cells[0].data;
+        if (!id) return cell;
+        return html(`<a href="/senators/${id}" class="table-link">${cell}</a>`);
       },
-      {
-        name: showYear ? "Nominee" : "Senator",
-        formatter: (cell: any, row: any) => {
-          const id = row.cells[0].data;
-          const urlType = showYear ? "nominees" : "senators";
-          if (!id) return cell;
-          return html(
-            `<a href="/${urlType}/${id}" class="table-link">${cell}</a>`
-          );
-        },
+    },
+    {
+      name: "Party",
+      formatter: (cell: any) => {
+        const party = String(cell).toLowerCase();
+        return html(`<span class="party-${party}">${cell}</span>`);
       },
-    ];
-
-    if (showYear) {
-      columns.push("Year");
-    } else {
-      columns.push({
-        name: "Party",
-        formatter: (cell: any) => {
-          const party = String(cell).toLowerCase();
-          return html(`<span class="party-${party}">${cell}</span>`);
-        },
-      });
-      columns.push("District");
-    }
-
-    columns.push({
+    },
+    "District",
+    {
       name: "Vote",
       formatter: (cell: any) => {
         return html(
           `<span class="vote-${String(cell).toLowerCase()}">${cell}</span>`
         );
       },
-    });
-
-    if (showConfirmed) {
-      columns.push({
-        name: "Confirmed?",
-        formatter: (cell: any) => {
-          const value = Array.isArray(cell) ? cell[0] : cell;
-          const className =
-            value === "Yes"
-              ? "confirmed-yes"
-              : value === "No"
-              ? "confirmed-no"
-              : "";
-          return html(`<span class="${className}">${value}</span>`);
-        },
-      });
-    }
-
-    return columns;
-  };
+    },
+  ];
 
   return (
     <Grid
       data={votes}
-      columns={buildColumns()}
+      columns={columns}
       search={true}
       sort={true}
-      pagination={{
-        limit: showYear ? 20 : 63,
-      }}
       fixedHeader={true}
     />
   );

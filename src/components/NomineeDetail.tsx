@@ -172,7 +172,7 @@ const NomineeDetail: React.FC = () => {
       ) : votes.length === 0 ? (
         <p>No voting data available.</p>
       ) : (
-        <VotesBySenators votes={votes} showYear={true} showConfirmed={true} />
+        <VotesBySenators votes={votes} />
       )}
     </div>
   );
