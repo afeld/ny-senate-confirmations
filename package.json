@@ -2,6 +2,7 @@
   "name": "airtable-react-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://afeld.github.io/senate-confirmations-js",
   "dependencies": {
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.42",
