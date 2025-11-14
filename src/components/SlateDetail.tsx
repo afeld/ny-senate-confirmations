@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
-import VotesTable from "./VotesTable";
+import VotesBySenators from "./VotesBySenators";
 
 const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();
@@ -104,7 +104,7 @@ const SlateDetail: React.FC = () => {
       </div>
 
       <h2>Senator Votes</h2>
-      <VotesTable votes={votes} />
+      <VotesBySenators votes={votes} />
     </div>
   );
 };

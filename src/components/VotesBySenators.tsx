@@ -3,18 +3,16 @@ import { Grid } from "gridjs-react";
 import { html } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 
-interface VotesTableProps {
+interface VotesBySenatorProps {
   votes: any[];
   showYear?: boolean;
   showConfirmed?: boolean;
-  showSlates?: boolean;
 }
 
-const VotesTable: React.FC<VotesTableProps> = ({
+const VotesBySenators: React.FC<VotesBySenatorProps> = ({
   votes,
   showYear = false,
   showConfirmed = false,
-  showSlates = false,
 }) => {
   if (votes.length === 0) {
     return <p>No voting data available.</p>;
@@ -27,14 +25,10 @@ const VotesTable: React.FC<VotesTableProps> = ({
         hidden: true,
       },
       {
-        name: showSlates ? "Slate" : showYear ? "Nominee" : "Senator",
+        name: showYear ? "Nominee" : "Senator",
         formatter: (cell: any, row: any) => {
           const id = row.cells[0].data;
-          const urlType = showSlates
-            ? "slates"
-            : showYear
-            ? "nominees"
-            : "senators";
+          const urlType = showYear ? "nominees" : "senators";
           if (!id) return cell;
           return html(
             `<a href="/${urlType}/${id}" class="table-link">${cell}</a>`
@@ -43,9 +37,7 @@ const VotesTable: React.FC<VotesTableProps> = ({
       },
     ];
 
-    if (showSlates) {
-      columns.push("Date");
-    } else if (showYear) {
+    if (showYear) {
       columns.push("Year");
     } else {
       columns.push({
@@ -88,4 +80,4 @@ const VotesTable: React.FC<VotesTableProps> = ({
   );
 };
 
-export default VotesTable;
+export default VotesBySenators;

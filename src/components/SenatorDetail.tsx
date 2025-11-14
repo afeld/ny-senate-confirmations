@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
-import VotesTable from "./VotesTable";
+import VotesBySlates from "./VotesBySlates";
 
 const SenatorDetail: React.FC = () => {
   const { senatorId } = useParams<{ senatorId: string }>();
@@ -31,15 +31,11 @@ const SenatorDetail: React.FC = () => {
           return voteSenatorIds && voteSenatorIds.includes(senatorId!);
         });
 
-        // Load nominees to get their names
-        const nominees = await service.getRecordsFromTable("Nominees");
-        const nomineesMap = new Map(nominees.map((n) => [n.id, n]));
-
-        // Load slates to connect votes to nominees
+        // Load slates to get slate information
         const slates = await service.getRecordsFromTable("Slates");
         const slatesMap = new Map(slates.map((s) => [s.id, s]));
 
-        // Transform votes for display
+        // Transform votes for display - group by slate
         const voteData = senatorVotes
           .map((vote) => {
             const slateIds = vote.fields["Slate"] as string[] | undefined;
@@ -48,24 +44,17 @@ const SenatorDetail: React.FC = () => {
 
             if (!slate) return null;
 
-            const nomineeIds = slate.fields["Nominee"] as string[] | undefined;
-            const nomineeId = nomineeIds?.[0];
-            const nominee = nomineeId ? nomineesMap.get(nomineeId) : null;
-
-            if (!nominee) return null;
-
             return [
-              nomineeId,
-              nominee.fields["Full Name"] || "Unknown",
-              nominee.fields["Year"] || "",
+              slateId,
+              slate.fields["Slate ID"] || slate.fields["Date"] || slateId,
+              slate.fields["Date"] || "",
               vote.fields["Vote"] || "",
-              nominee.fields["Confirmed?"] || "",
             ];
           })
           .filter((v) => v !== null) as any[];
 
-        // Sort by nominee name
-        voteData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+        // Sort by date (descending)
+        voteData.sort((a, b) => String(b[2]).localeCompare(String(a[2])));
 
         setVotes(voteData);
       } catch (error) {
@@ -131,8 +120,12 @@ const SenatorDetail: React.FC = () => {
         </div>
       </div>
 
-      <h2>Votes on Nominees</h2>
-      <VotesTable votes={votes} showYear={true} showConfirmed={true} />
+      <h2>Votes on Slates</h2>
+      {votes.length === 0 ? (
+        <p>No voting data available for this senator.</p>
+      ) : (
+        <VotesBySlates votes={votes} />
+      )}
     </div>
   );
 };

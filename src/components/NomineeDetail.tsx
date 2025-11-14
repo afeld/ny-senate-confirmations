@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
-import VotesTable from "./VotesTable";
+import VotesBySenators from "./VotesBySenators";
 
 const NomineeDetail: React.FC = () => {
   const { nomineeId } = useParams<{ nomineeId: string }>();
@@ -143,7 +143,7 @@ const NomineeDetail: React.FC = () => {
       </div>
 
       <h2>Senator Votes</h2>
-      <VotesTable votes={votes} />
+      <VotesBySenators votes={votes} />
     </div>
   );
 };
