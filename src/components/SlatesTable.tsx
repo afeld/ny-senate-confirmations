@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "gridjs-react";
 import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import AirtableService from "../services/airtable";
+import TableGrid from "./TableGrid";
 
 const SlatesTable: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -81,7 +80,7 @@ const SlatesTable: React.FC = () => {
   }
 
   return (
-    <Grid
+    <TableGrid
       data={data}
       columns={[
         {
@@ -105,11 +104,6 @@ const SlatesTable: React.FC = () => {
         "Ayes",
         "Nays",
       ]}
-      search={true}
-      sort={true}
-      pagination={{
-        limit: 20,
-      }}
     />
   );
 };

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Grid } from "gridjs-react";
 import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 import VotesBySenators from "./VotesBySenators";
 import VoteBar from "./VoteBar";
+import TableGrid from "./TableGrid";
 
 const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();
@@ -181,7 +180,7 @@ const SlateDetail: React.FC = () => {
       ) : nominees.length === 0 ? (
         <p>No nominees found for this slate.</p>
       ) : (
-        <Grid
+        <TableGrid
           data={nominees}
           columns={[
             {
@@ -213,11 +212,6 @@ const SlateDetail: React.FC = () => {
               hidden: true,
             },
           ]}
-          search={true}
-          sort={true}
-          pagination={{
-            limit: 20,
-          }}
         />
       )}
 

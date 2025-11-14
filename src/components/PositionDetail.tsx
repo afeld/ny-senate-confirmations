@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Grid } from "gridjs-react";
+import { Link, useParams } from "react-router-dom";
 import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import AirtableService, { AirtableRecord } from "../services/airtable";
+import TableGrid from "./TableGrid";
 
 const PositionDetail: React.FC = () => {
   const { positionId } = useParams<{ positionId: string }>();
@@ -104,7 +103,7 @@ const PositionDetail: React.FC = () => {
       ) : nominees.length === 0 ? (
         <p>No nominees found for this position.</p>
       ) : (
-        <Grid
+        <TableGrid
           data={nominees}
           columns={[
             {
@@ -137,11 +136,6 @@ const PositionDetail: React.FC = () => {
             "Ayes",
             "Nays",
           ]}
-          search={true}
-          sort={true}
-          pagination={{
-            limit: 20,
-          }}
         />
       )}
     </div>

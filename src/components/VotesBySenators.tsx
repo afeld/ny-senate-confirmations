@@ -1,7 +1,6 @@
 import React from "react";
-import { Grid } from "gridjs-react";
 import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
+import TableGrid from "./TableGrid";
 
 interface VotesBySenatorProps {
   votes: any[];
@@ -43,18 +42,7 @@ const VotesBySenators: React.FC<VotesBySenatorProps> = ({ votes }) => {
     },
   ];
 
-  return (
-    <Grid
-      data={votes}
-      columns={columns}
-      search={true}
-      sort={true}
-      fixedHeader={true}
-      pagination={{
-        limit: 20,
-      }}
-    />
-  );
+  return <TableGrid data={votes} columns={columns} />;
 };
 
 export default VotesBySenators;

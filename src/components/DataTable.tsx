@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "gridjs-react";
 import { html } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import AirtableService from "../services/airtable";
+import TableGrid from "./TableGrid";
 
 interface DataTableProps {
   tableName: string;
@@ -54,16 +53,7 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <div>
       <h2>{tableName}</h2>
-      <Grid
-        data={data}
-        columns={columns}
-        search={true}
-        sort={true}
-        pagination={{
-          limit: 20,
-        }}
-        fixedHeader={true}
-      />
+      <TableGrid data={data} columns={columns} />
     </div>
   );
 };
