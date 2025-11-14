@@ -13,9 +13,11 @@ const SlateDetail: React.FC = () => {
   const [votes, setVotes] = useState<any[]>([]);
   const [nominees, setNominees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [votesLoading, setVotesLoading] = useState(true);
+  const [nomineesLoading, setNomineesLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadSlate = async () => {
       try {
         const service = new AirtableService();
 
@@ -23,11 +25,22 @@ const SlateDetail: React.FC = () => {
         const slates = await service.getRecordsFromTable("Slates");
         const foundSlate = slates.find((s) => s.id === slateId);
         setSlate(foundSlate || null);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading slate details:", error);
+        setLoading(false);
+      }
+    };
 
-        if (!foundSlate) {
-          setLoading(false);
-          return;
-        }
+    loadSlate();
+  }, [slateId]);
+
+  useEffect(() => {
+    const loadVotes = async () => {
+      if (!slate) return;
+
+      try {
+        const service = new AirtableService();
 
         // Load all individual votes for this slate
         const allVotes = await service.getRecordsFromTable("Individual Votes");
@@ -59,10 +72,26 @@ const SlateDetail: React.FC = () => {
         voteData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
 
         setVotes(voteData);
+      } catch (error) {
+        console.error("Error loading votes:", error);
+      } finally {
+        setVotesLoading(false);
+      }
+    };
+
+    loadVotes();
+  }, [slate, slateId]);
+
+  useEffect(() => {
+    const loadNominees = async () => {
+      if (!slate) return;
+
+      try {
+        const service = new AirtableService();
 
         // Load nominees for this slate
         const slateNomineeIds =
-          (foundSlate.fields["Nominees"] as string[] | undefined) || [];
+          (slate.fields["Nominees"] as string[] | undefined) || [];
         const allNominees = await service.getRecordsFromTable("Nominees");
         const slateNominees = allNominees.filter((n) =>
           slateNomineeIds.includes(n.id)
@@ -93,14 +122,14 @@ const SlateDetail: React.FC = () => {
 
         setNominees(nomineeData);
       } catch (error) {
-        console.error("Error loading slate details:", error);
+        console.error("Error loading nominees:", error);
       } finally {
-        setLoading(false);
+        setNomineesLoading(false);
       }
     };
 
-    loadData();
-  }, [slateId]);
+    loadNominees();
+  }, [slate]);
 
   if (loading) {
     return <div className="loading">Loading slate details...</div>;
@@ -147,7 +176,9 @@ const SlateDetail: React.FC = () => {
       </div>
 
       <h2>Nominees</h2>
-      {nominees.length === 0 ? (
+      {nomineesLoading ? (
+        <div className="loading">Loading nominees...</div>
+      ) : nominees.length === 0 ? (
         <p>No nominees found for this slate.</p>
       ) : (
         <Grid
@@ -191,7 +222,11 @@ const SlateDetail: React.FC = () => {
       )}
 
       <h2>Senator Votes</h2>
-      <VotesBySenators votes={votes} />
+      {votesLoading ? (
+        <div className="loading">Loading votes...</div>
+      ) : (
+        <VotesBySenators votes={votes} />
+      )}
     </div>
   );
 };

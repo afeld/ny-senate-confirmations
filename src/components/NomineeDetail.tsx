@@ -10,9 +10,10 @@ const NomineeDetail: React.FC = () => {
   const [position, setPosition] = useState<AirtableRecord | null>(null);
   const [votes, setVotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [votesLoading, setVotesLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadNominee = async () => {
       try {
         const service = new AirtableService();
 
@@ -36,11 +37,28 @@ const NomineeDetail: React.FC = () => {
           setPosition(foundPosition || null);
         }
 
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading nominee details:", error);
+        setLoading(false);
+      }
+    };
+
+    loadNominee();
+  }, [nomineeId]);
+
+  useEffect(() => {
+    const loadVotes = async () => {
+      if (!nominee) return;
+
+      try {
+        const service = new AirtableService();
+
         // Get the slate ID(s) from the nominee
-        const slateIds = foundNominee.fields["Slate"] as string[] | undefined;
+        const slateIds = nominee.fields["Slate"] as string[] | undefined;
 
         if (!slateIds || slateIds.length === 0) {
-          setLoading(false);
+          setVotesLoading(false);
           return;
         }
 
@@ -79,14 +97,14 @@ const NomineeDetail: React.FC = () => {
 
         setVotes(voteData);
       } catch (error) {
-        console.error("Error loading nominee details:", error);
+        console.error("Error loading votes:", error);
       } finally {
-        setLoading(false);
+        setVotesLoading(false);
       }
     };
 
-    loadData();
-  }, [nomineeId]);
+    loadVotes();
+  }, [nominee]);
 
   if (loading) {
     return <div className="loading">Loading nominee details...</div>;
@@ -149,7 +167,13 @@ const NomineeDetail: React.FC = () => {
       </div>
 
       <h2>Senator Votes</h2>
-      <VotesBySenators votes={votes} />
+      {votesLoading ? (
+        <div className="loading">Loading votes...</div>
+      ) : votes.length === 0 ? (
+        <p>No voting data available.</p>
+      ) : (
+        <VotesBySenators votes={votes} showYear={true} showConfirmed={true} />
+      )}
     </div>
   );
 };

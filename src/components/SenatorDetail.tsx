@@ -9,9 +9,10 @@ const SenatorDetail: React.FC = () => {
   const [senator, setSenator] = useState<AirtableRecord | null>(null);
   const [votes, setVotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [votesLoading, setVotesLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadSenator = async () => {
       try {
         const service = new AirtableService();
 
@@ -19,11 +20,22 @@ const SenatorDetail: React.FC = () => {
         const senators = await service.getRecordsFromTable("Senators");
         const foundSenator = senators.find((s) => s.id === senatorId);
         setSenator(foundSenator || null);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading senator details:", error);
+        setLoading(false);
+      }
+    };
 
-        if (!foundSenator) {
-          setLoading(false);
-          return;
-        }
+    loadSenator();
+  }, [senatorId]);
+
+  useEffect(() => {
+    const loadVotes = async () => {
+      if (!senator) return;
+
+      try {
+        const service = new AirtableService();
 
         // Load all individual votes for this senator
         const allVotes = await service.getRecordsFromTable("Individual Votes");
@@ -59,14 +71,14 @@ const SenatorDetail: React.FC = () => {
 
         setVotes(voteData);
       } catch (error) {
-        console.error("Error loading senator details:", error);
+        console.error("Error loading votes:", error);
       } finally {
-        setLoading(false);
+        setVotesLoading(false);
       }
     };
 
-    loadData();
-  }, [senatorId]);
+    loadVotes();
+  }, [senator, senatorId]);
 
   if (loading) {
     return <div className="loading">Loading senator details...</div>;
@@ -134,7 +146,9 @@ const SenatorDetail: React.FC = () => {
       </div>
 
       <h2>Votes on Slates</h2>
-      {votes.length === 0 ? (
+      {votesLoading ? (
+        <div className="loading">Loading votes...</div>
+      ) : votes.length === 0 ? (
         <p>No voting data available for this senator.</p>
       ) : (
         <VotesBySlates votes={votes} />

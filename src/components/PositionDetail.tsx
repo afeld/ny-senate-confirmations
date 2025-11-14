@@ -10,9 +10,10 @@ const PositionDetail: React.FC = () => {
   const [position, setPosition] = useState<AirtableRecord | null>(null);
   const [nominees, setNominees] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [nomineesLoading, setNomineesLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadPosition = async () => {
       try {
         const service = new AirtableService();
 
@@ -20,11 +21,22 @@ const PositionDetail: React.FC = () => {
         const positions = await service.getRecordsFromTable("Positions");
         const foundPosition = positions.find((p) => p.id === positionId);
         setPosition(foundPosition || null);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading position details:", error);
+        setLoading(false);
+      }
+    };
 
-        if (!foundPosition) {
-          setLoading(false);
-          return;
-        }
+    loadPosition();
+  }, [positionId]);
+
+  useEffect(() => {
+    const loadNominees = async () => {
+      if (!position) return;
+
+      try {
+        const service = new AirtableService();
 
         // Load nominees for this position
         const allNominees = await service.getRecordsFromTable("Nominees");
@@ -54,14 +66,14 @@ const PositionDetail: React.FC = () => {
 
         setNominees(nomineeData);
       } catch (error) {
-        console.error("Error loading position details:", error);
+        console.error("Error loading nominees:", error);
       } finally {
-        setLoading(false);
+        setNomineesLoading(false);
       }
     };
 
-    loadData();
-  }, [positionId]);
+    loadNominees();
+  }, [position, positionId]);
 
   if (loading) {
     return <div className="loading">Loading position details...</div>;
@@ -87,7 +99,9 @@ const PositionDetail: React.FC = () => {
       </div>
 
       <h2>Nominees for this Position</h2>
-      {nominees.length === 0 ? (
+      {nomineesLoading ? (
+        <div className="loading">Loading nominees...</div>
+      ) : nominees.length === 0 ? (
         <p>No nominees found for this position.</p>
       ) : (
         <Grid
