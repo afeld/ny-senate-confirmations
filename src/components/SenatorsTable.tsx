@@ -1,64 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Grid } from "gridjs-react";
-import "gridjs/dist/theme/mermaid.css";
-import AirtableService from "../services/airtable";
+import React from "react";
+import DataTable from "./DataTable";
 
 const SenatorsTable: React.FC = () => {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const service = new AirtableService();
-        const records = await service.getRecordsFromTable("Senators");
-
-        // Transform records for Grid.js
-        const tableData = records.map((record) => [
-          record.fields["Full Name"] || "",
-          record.fields["Party"] || "",
-          record.fields["District"] || "",
-          record.fields["% Aye"]
-            ? `${Math.round((record.fields["% Aye"] as number) * 100)}%`
-            : "",
-          record.fields["% Nay"]
-            ? `${Math.round((record.fields["% Nay"] as number) * 100)}%`
-            : "",
-          record.fields["Number of Votes"] || 0,
-        ]);
-
-        // Sort by name (index 0)
-        tableData.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
-
-        setData(tableData);
-      } catch (error) {
-        console.error("Error loading senators:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading senators...</div>;
-  }
-
   return (
-    <div>
-      <h2>Senators</h2>
-      <Grid
-        data={data}
-        columns={["Name", "Party", "District", "% Aye", "% Nay", "# Votes"]}
-        search={true}
-        sort={true}
-        pagination={{
-          limit: 20,
-        }}
-        fixedHeader={true}
-      />
-    </div>
+    <DataTable
+      tableName="Senators"
+      title="Senators"
+      transformRecord={(record) => [
+        record.fields["Full Name"] || "",
+        record.fields["Party"] || "",
+        record.fields["District"] || "",
+        record.fields["% Aye"]
+          ? `${Math.round((record.fields["% Aye"] as number) * 100)}%`
+          : "",
+        record.fields["% Nay"]
+          ? `${Math.round((record.fields["% Nay"] as number) * 100)}%`
+          : "",
+        record.fields["Number of Votes"] || 0,
+      ]}
+      columns={["Name", "Party", "District", "% Aye", "% Nay", "# Votes"]}
+    />
   );
 };
 
