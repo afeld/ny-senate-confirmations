@@ -18,14 +18,14 @@ const VotesBySlates: React.FC<VotesBySlatesProps> = ({ votes }) => {
       hidden: true,
     },
     {
-      name: "Slate",
+      name: "Date",
       formatter: (cell: any, row: any) => {
         const id = row.cells[0].data;
         if (!id) return cell;
         return html(`<a href="/slates/${id}" class="table-link">${cell}</a>`);
       },
     },
-    "Date",
+    "Slate of Day",
     {
       name: "Vote",
       formatter: (cell: any) => {

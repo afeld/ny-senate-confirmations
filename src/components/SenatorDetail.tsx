@@ -46,15 +46,15 @@ const SenatorDetail: React.FC = () => {
 
             return [
               slateId,
-              slate.fields["Slate ID"] || slate.fields["Date"] || slateId,
               slate.fields["Date"] || "",
+              slate.fields["Slate of Day"] || "",
               vote.fields["Vote"] || "",
             ];
           })
           .filter((v) => v !== null) as any[];
 
         // Sort by date (descending)
-        voteData.sort((a, b) => String(b[2]).localeCompare(String(a[2])));
+        voteData.sort((a, b) => String(b[1]).localeCompare(String(a[1])));
 
         setVotes(voteData);
       } catch (error) {
