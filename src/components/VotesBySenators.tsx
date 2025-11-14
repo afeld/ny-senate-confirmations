@@ -50,6 +50,9 @@ const VotesBySenators: React.FC<VotesBySenatorProps> = ({ votes }) => {
       search={true}
       sort={true}
       fixedHeader={true}
+      pagination={{
+        limit: 20,
+      }}
     />
   );
 };
