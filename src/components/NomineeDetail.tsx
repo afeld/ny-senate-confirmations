@@ -67,6 +67,7 @@ const NomineeDetail: React.FC = () => {
           const senator = senatorId ? senatorsMap.get(senatorId) : null;
 
           return [
+            senatorId,
             senator?.fields["Full Name"] || "Unknown",
             senator?.fields["Party"] || "",
             senator?.fields["District"] || "",
@@ -74,8 +75,8 @@ const NomineeDetail: React.FC = () => {
           ];
         });
 
-        // Sort by senator name
-        voteData.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+        // Sort by senator name (index 1 now)
+        voteData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
 
         setVotes(voteData);
       } catch (error) {
@@ -150,7 +151,20 @@ const NomineeDetail: React.FC = () => {
         <Grid
           data={votes}
           columns={[
-            "Senator",
+            {
+              id: "senatorId",
+              hidden: true,
+            },
+            {
+              name: "Senator",
+              formatter: (cell: any, row: any) => {
+                const senatorId = row.cells[0].data;
+                if (!senatorId) return cell;
+                return html(
+                  `<a href="/senators/${senatorId}" class="table-link">${cell}</a>`
+                );
+              },
+            },
             "Party",
             "District",
             {
