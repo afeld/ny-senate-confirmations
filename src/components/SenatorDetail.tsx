@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import AirtableService, { AirtableRecord } from "../services/airtable";
 import VotesBySlates from "./VotesBySlates";
+import VoteBar from "./VoteBar";
 
 const SenatorDetail: React.FC = () => {
   const { senatorId } = useParams<{ senatorId: string }>();
@@ -103,18 +104,15 @@ const SenatorDetail: React.FC = () => {
               <strong>District:</strong> {String(senator.fields["District"])}
             </div>
           )}
-          {senator.fields["Number of Votes"] !== undefined && (
+          {senator.fields["Ayes"] !== undefined && (
             <div>
-              <strong>Number of Votes:</strong>{" "}
-              {String(senator.fields["Number of Votes"])}
-            </div>
-          )}
-          {senator.fields["% Aye"] !== undefined && (
-            <div>
-              <strong>% Aye:</strong>{" "}
-              {Math.round((senator.fields["% Aye"] as number) * 100)}% |{" "}
-              <strong>% Nay:</strong>{" "}
-              {Math.round((senator.fields["% Nay"] as number) * 100)}%
+              <strong>Votes:</strong>
+              <VoteBar
+                ayes={Number(senator.fields["Ayes"] || 0)}
+                nays={Number(senator.fields["Nays"] || 0)}
+                abs={Number(senator.fields["Absent"] || 0)}
+                exc={Number(senator.fields["Excused"] || 0)}
+              />
             </div>
           )}
         </div>
