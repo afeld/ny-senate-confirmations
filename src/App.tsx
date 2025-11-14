@@ -17,7 +17,7 @@ function App() {
       <div className="app-container">
         <header className="app-header">
           <Link to="/" className="app-title">
-            <h1>Airtable Data Viewer</h1>
+            <h1>NY Senate Confirmation Vote Data</h1>
           </Link>
         </header>
         <main className="app-main">
