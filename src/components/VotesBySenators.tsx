@@ -2,6 +2,8 @@ import React from "react";
 import { html } from "gridjs";
 import TableGrid from "./TableGrid";
 import { linkGenerators } from "../utils/linkHelpers";
+import { renderToString } from "react-dom/server";
+import Vote from "./Vote";
 
 interface VotesBySenatorProps {
   votes: any[];
@@ -35,11 +37,8 @@ const VotesBySenators: React.FC<VotesBySenatorProps> = ({ votes }) => {
     "District",
     {
       name: "Vote",
-      formatter: (cell: any) => {
-        return html(
-          `<span class="vote vote-${String(cell).toLowerCase()}">${cell}</span>`
-        );
-      },
+      formatter: (cell: any) =>
+        html(renderToString(<Vote vote={String(cell)}></Vote>)),
     },
   ];
 
