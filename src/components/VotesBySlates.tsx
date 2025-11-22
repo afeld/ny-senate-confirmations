@@ -4,6 +4,7 @@ import TableGrid from "./TableGrid";
 import { linkGenerators } from "../utils/linkHelpers";
 import { renderToString } from "react-dom/server";
 import Vote from "./Vote";
+import { ConfirmedDetail } from "./Confirmed";
 
 interface VotesBySlatesProps {
   votes: any[];
@@ -32,6 +33,15 @@ const VotesBySlates: React.FC<VotesBySlatesProps> = ({ votes }) => {
       name: "Vote",
       formatter: (cell: any) =>
         html(renderToString(<Vote vote={String(cell)}></Vote>)),
+    },
+    {
+      name: "Confirmed?",
+      formatter: (cell: any) =>
+        html(
+          renderToString(
+            <ConfirmedDetail confirmed={String(cell)}></ConfirmedDetail>
+          )
+        ),
     },
   ];
 

@@ -164,6 +164,7 @@ export const useSlatesTableData = () => {
             record.fields["Date"] || "",
             record.fields["Slate of Day"] || "",
             positionLinks || "",
+            record.fields["Confirmed?"] || "",
             record.fields["Ayes"] || 0,
             record.fields["Nays"] || 0,
           ];
@@ -220,6 +221,7 @@ export const useSenatorVotes = (senatorId: string | undefined) => {
             slate?.fields["Date"] || "",
             slate?.fields["Slate of Day"] || "",
             vote.fields["Vote"] || "",
+            slate?.fields["Confirmed?"] || "",
           ];
         });
 

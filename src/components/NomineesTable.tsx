@@ -56,10 +56,10 @@ const NomineesTable: React.FC = () => {
           },
           {
             name: "Confirmed?",
-            formatter: (confirmed: any) =>
+            formatter: (cell: any) =>
               html(
                 renderToString(
-                  <ConfirmedDetail confirmed={confirmed}></ConfirmedDetail>
+                  <ConfirmedDetail confirmed={String(cell)}></ConfirmedDetail>
                 )
               ),
           },
