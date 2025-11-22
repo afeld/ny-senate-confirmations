@@ -15,44 +15,49 @@ const SlatesTable: React.FC = () => {
   }
 
   return (
-    <TableGrid
-      data={data}
-      columns={[
-        {
-          id: "id",
-          hidden: true,
-        },
-        {
-          name: "Slate",
-          formatter: (cell: any, row: any) => {
-            const id = row.cells[0].data;
-            return html(linkGenerators.slate(id, cell));
+    <div>
+      <h2>Slates</h2>
+      <TableGrid
+        data={data}
+        columns={[
+          {
+            id: "id",
+            hidden: true,
           },
-        },
-        {
-          name: "Positions",
-          formatter: (cell: any) =>
-            html(
-              renderToString(
-                <PositionsList positionData={cell as Positions}></PositionsList>
-              )
-            ),
-          // @ts-ignore
-          width: "40%",
-        },
-        {
-          name: "Confirmed?",
-          formatter: (cell: any) =>
-            html(
-              renderToString(
-                <ConfirmedDetail confirmed={String(cell)}></ConfirmedDetail>
-              )
-            ),
-        },
-        "Ayes",
-        "Nays",
-      ]}
-    />
+          {
+            name: "Slate",
+            formatter: (cell: any, row: any) => {
+              const id = row.cells[0].data;
+              return html(linkGenerators.slate(id, cell));
+            },
+          },
+          {
+            name: "Positions",
+            formatter: (cell: any) =>
+              html(
+                renderToString(
+                  <PositionsList
+                    positionData={cell as Positions}
+                  ></PositionsList>
+                )
+              ),
+            // @ts-ignore
+            width: "40%",
+          },
+          {
+            name: "Confirmed?",
+            formatter: (cell: any) =>
+              html(
+                renderToString(
+                  <ConfirmedDetail confirmed={String(cell)}></ConfirmedDetail>
+                )
+              ),
+          },
+          "Ayes",
+          "Nays",
+        ]}
+      />
+    </div>
   );
 };
 
