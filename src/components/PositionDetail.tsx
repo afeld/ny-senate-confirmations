@@ -4,6 +4,7 @@ import { html } from "gridjs";
 import { useRecordById, usePositionNominees } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
 import { linkGenerators } from "../utils/linkHelpers";
+import { ConfirmedDetail } from "./Confirmed";
 
 const PositionDetail: React.FC = () => {
   const { positionId } = useParams<{ positionId: string }>();
@@ -59,16 +60,9 @@ const PositionDetail: React.FC = () => {
             "Year",
             {
               name: "Confirmed?",
-              formatter: (cell: any) => {
-                const value = Array.isArray(cell) ? cell[0] : cell;
-                const className =
-                  value === "Yes"
-                    ? "confirmed-yes"
-                    : value === "No"
-                    ? "confirmed-no"
-                    : "";
-                return html(`<span class="${className}">${value}</span>`);
-              },
+              formatter: (confirmed: string) => (
+                <ConfirmedDetail confirmed={confirmed}></ConfirmedDetail>
+              ),
             },
             "Ayes",
             "Nays",

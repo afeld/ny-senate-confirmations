@@ -10,7 +10,7 @@ import {
 import VotesBySenators from "./VotesBySenators";
 import VoteBar from "./VoteBar";
 import TableGrid from "./TableGrid";
-import Confirmed from "./Confirmed";
+import { Confirmed } from "./Confirmed";
 
 const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();

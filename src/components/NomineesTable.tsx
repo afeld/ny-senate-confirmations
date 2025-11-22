@@ -3,6 +3,8 @@ import { html } from "gridjs";
 import { useNomineesTableData } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
 import { linkGenerators } from "../utils/linkHelpers";
+import { ConfirmedDetail } from "./Confirmed";
+import { renderToString } from "react-dom/server";
 
 const NomineesTable: React.FC = () => {
   const { data, loading } = useNomineesTableData();
@@ -54,15 +56,12 @@ const NomineesTable: React.FC = () => {
           },
           {
             name: "Confirmed?",
-            formatter: (cell: any) => {
-              const className =
-                cell === "Yes"
-                  ? "confirmed-yes"
-                  : cell === "No"
-                  ? "confirmed-no"
-                  : "";
-              return html(`<span class="${className}">${cell}</span>`);
-            },
+            formatter: (confirmed: any) =>
+              html(
+                renderToString(
+                  <ConfirmedDetail confirmed={confirmed}></ConfirmedDetail>
+                )
+              ),
           },
           "Ayes",
           "Nays",

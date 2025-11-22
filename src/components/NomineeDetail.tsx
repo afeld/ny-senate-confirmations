@@ -4,7 +4,7 @@ import AirtableService, { AirtableRecord } from "../services/airtable";
 import { useRecordById, useNomineeVotes } from "../hooks/useAirtableData";
 import VotesBySenators from "./VotesBySenators";
 import VoteBar from "./VoteBar";
-import Confirmed from "./Confirmed";
+import { Confirmed } from "./Confirmed";
 
 const NomineeDetail: React.FC = () => {
   const { nomineeId } = useParams<{ nomineeId: string }>();
