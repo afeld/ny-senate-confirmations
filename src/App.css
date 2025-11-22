@@ -248,45 +248,30 @@ a {
   margin-top: 1rem;
 }
 
+.vote,
 .confirmed-status {
   font-weight: bold;
 }
 
-.confirmed-yes,
-td .confirmed-yes,
-.gridjs-td .confirmed-yes {
-  color: var(--vote-aye) !important;
-  font-weight: bold;
-}
-
-.confirmed-no,
-td .confirmed-no,
-.gridjs-td .confirmed-no {
-  color: var(--vote-nay) !important;
-  font-weight: bold;
-}
-
 /* Vote colors */
-.vote-aye {
+.vote-aye,
+.confirmed-yes {
   color: var(--vote-aye);
-  font-weight: bold;
 }
 
-.vote-nay {
+.vote-nay,
+.confirmed-no {
   color: var(--vote-nay);
-  font-weight: bold;
 }
 
 .vote-abs,
 .vote-absent {
   color: var(--vote-abs);
-  font-weight: bold;
 }
 
 .vote-exc,
 .vote-excused {
   color: var(--vote-exc);
-  font-weight: bold;
 }
 
 /* Party colors */

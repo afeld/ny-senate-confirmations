@@ -30,7 +30,7 @@ const VotesBySlates: React.FC<VotesBySlatesProps> = ({ votes }) => {
       name: "Vote",
       formatter: (cell: any) => {
         return html(
-          `<span class="vote-${String(cell).toLowerCase()}">${cell}</span>`
+          `<span class="vote vote-${String(cell).toLowerCase()}">${cell}</span>`
         );
       },
     },
