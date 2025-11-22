@@ -4,6 +4,7 @@ import AirtableService, { AirtableRecord } from "../services/airtable";
 import { useRecordById, useNomineeVotes } from "../hooks/useAirtableData";
 import VotesBySenators from "./VotesBySenators";
 import VoteBar from "./VoteBar";
+import Confirmed from "./Confirmed";
 
 const NomineeDetail: React.FC = () => {
   const { nomineeId } = useParams<{ nomineeId: string }>();
@@ -75,18 +76,9 @@ const NomineeDetail: React.FC = () => {
             </div>
           )}
           {nominee.fields["Confirmed?"] && (
-            <div>
-              <strong>Confirmed:</strong>{" "}
-              <span
-                className={`confirmed-status ${
-                  nominee.fields["Confirmed?"] === "Yes"
-                    ? "confirmed-yes"
-                    : "confirmed-no"
-                }`}
-              >
-                {String(nominee.fields["Confirmed?"])}
-              </span>
-            </div>
+            <Confirmed
+              confirmed={String(nominee.fields["Confirmed?"])}
+            ></Confirmed>
           )}
           {nominee.fields["Ayes"] !== undefined && (
             <div>

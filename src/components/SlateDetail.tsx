@@ -10,6 +10,7 @@ import {
 import VotesBySenators from "./VotesBySenators";
 import VoteBar from "./VoteBar";
 import TableGrid from "./TableGrid";
+import Confirmed from "./Confirmed";
 
 const SlateDetail: React.FC = () => {
   const { slateId } = useParams<{ slateId: string }>();
@@ -61,6 +62,7 @@ const SlateDetail: React.FC = () => {
               />
             </div>
           )}
+          <Confirmed confirmed={String(slate.fields["Confirmed?"])}></Confirmed>
         </div>
       </div>
 
