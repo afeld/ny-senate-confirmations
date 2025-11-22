@@ -5,7 +5,7 @@
   "homepage": "https://afeld.github.io/ny-senate-confirmations",
   "dependencies": {
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.4",
+    "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "airtable": "^0.12.2",
     "gridjs": "^6.2.0",
@@ -16,9 +16,9 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "start": "parcel serve public/index.html --dist-dir build",
-    "build": "parcel build public/index.html --dist-dir build --public-url ./",
-    "clean": "rm -rf build .parcel-cache"
+    "start": "parcel serve public/index.html",
+    "build": "parcel build public/index.html --public-url ./",
+    "clean": "rm -rf dist .parcel-cache"
   },
   "eslintConfig": {
     "extends": [
