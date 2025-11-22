@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import AirtableService, { AirtableRecord } from "../services/airtable";
+import { sortBy } from "lodash";
+
+const sortByIndex = (collection: any[], index: number) =>
+  sortBy(collection, [(el) => el[1]]);
 
 export const useTableData = (tableName: string) => {
   const [data, setData] = useState<AirtableRecord[]>([]);
@@ -74,7 +78,7 @@ export const useNomineesTableData = () => {
         const positionsMap = new Map(positions.map((p) => [p.id, p]));
         const slatesMap = new Map(slates.map((s) => [s.id, s]));
 
-        const tableData = nominees.map((record) => {
+        let tableData = nominees.map((record) => {
           const positionIds = record.fields["Position"] as string[] | undefined;
           const positionId = positionIds?.[0];
           const position = positionId ? positionsMap.get(positionId) : null;
@@ -98,8 +102,8 @@ export const useNomineesTableData = () => {
           ];
         });
 
-        // Sort by name (index 1)
-        tableData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+        // Sort by name
+        tableData = sortByIndex(tableData, 1);
 
         setData(tableData);
       } catch (error) {
@@ -150,7 +154,7 @@ export const useSlatesTableData = () => {
           const uniquePositionIds = [...new Set(positionIds)];
 
           // Create array of position data for sorting
-          const positionData: Positions = uniquePositionIds
+          let positionData: Positions = uniquePositionIds
             .map((id) => {
               const position = positionsMap.get(id);
               if (!position) return null;
@@ -158,8 +162,7 @@ export const useSlatesTableData = () => {
             })
             .filter((p) => p !== null);
 
-          // Sort by organization
-          positionData.sort((a, b) => a!.org.localeCompare(b!.org));
+          positionData = sortBy(positionData, ["org"]);
 
           const date = record.fields["Date"];
           const slateOfDay = record.fields["Slate of Day"];
@@ -280,7 +283,7 @@ export const useNomineeVotes = (nominee: AirtableRecord | null) => {
         });
 
         // Transform votes for display
-        const voteData = relevantVotes.map((vote) => {
+        let voteData = relevantVotes.map((vote) => {
           const senatorIds = vote.fields["Senator"] as string[] | undefined;
           const senatorId = senatorIds?.[0];
           const senator = senatorId ? senatorsMap.get(senatorId) : null;
@@ -295,7 +298,7 @@ export const useNomineeVotes = (nominee: AirtableRecord | null) => {
         });
 
         // Sort by senator name
-        voteData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+        voteData = sortByIndex(voteData, 1);
 
         setVotes(voteData);
       } catch (error) {
@@ -337,7 +340,7 @@ export const useSlateVotes = (
         const senatorsMap = new Map(senators.map((s) => [s.id, s]));
 
         // Transform votes for display
-        const voteData = slateVotes.map((vote) => {
+        let voteData = slateVotes.map((vote) => {
           const senatorIds = vote.fields["Senator"] as string[] | undefined;
           const senatorId = senatorIds?.[0];
           const senator = senatorId ? senatorsMap.get(senatorId) : null;
@@ -352,7 +355,7 @@ export const useSlateVotes = (
         });
 
         // Sort by senator name
-        voteData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+        voteData = sortByIndex(voteData, 1);
 
         setVotes(voteData);
       } catch (error) {
@@ -395,7 +398,7 @@ export const useSlateNominees = (
         const positionsMap = new Map(allPositions.map((p) => [p.id, p]));
 
         // Transform nominees for display
-        const nomineeData = slateNominees.map((nominee) => {
+        let nomineeData = slateNominees.map((nominee) => {
           const positionIds =
             (nominee.fields["Position"] as string[] | undefined) || [];
           const positionId = positionIds[0];
@@ -411,7 +414,7 @@ export const useSlateNominees = (
         });
 
         // Sort by nominee name
-        nomineeData.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+        nomineeData = sortByIndex(nomineeData, 1);
 
         setNominees(nomineeData);
       } catch (error) {
