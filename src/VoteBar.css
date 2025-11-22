@@ -2,19 +2,19 @@
   margin: 1rem 0;
 
   .vote-aye {
-    background-color: #27ae60;
+    background-color: var(--vote-aye);
   }
 
   .vote-nay {
-    background-color: #e74c3c;
+    background-color: var(--vote-nay);
   }
 
   .vote-abs {
-    background-color: #95a5a6;
+    background-color: var(--vote-abs);
   }
 
   .vote-exc {
-    background-color: #7f8c8d;
+    background-color: var(--vote-exc);
   }
 }
 
