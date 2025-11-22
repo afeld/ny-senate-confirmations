@@ -39,18 +39,18 @@ a {
   gap: 2rem;
   position: relative;
 
-  & a {
-  text-decoration: none;
-}
+  a {
+    text-decoration: none;
+  }
 
-  & h1 {
-  margin: 0;
-  color: var(--ri-light-blue);
-  font-size: 2rem;
-  font-family: "Roboto Slab", serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
+  h1 {
+    margin: 0;
+    color: var(--ri-light-blue);
+    font-size: 2rem;
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
   }
 }
 
@@ -196,12 +196,12 @@ a {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .app-header h1 {
-    font-size: 1.2rem;
-  }
-
   .app-header {
     padding: 1rem;
+
+    h1 {
+      font-size: 1.2rem;
+    }
   }
 }
 
@@ -209,19 +209,19 @@ a {
 .table-link {
   color: #3498db;
   text-decoration: none;
-}
 
-.table-link:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .back-link {
   color: #3498db;
   text-decoration: none;
-}
 
-.back-link:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Nominee detail page */
@@ -314,11 +314,11 @@ td .confirmed-no,
   text-decoration: none;
   color: inherit;
   display: block;
-}
 
-.record-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .record-card-content {
@@ -329,19 +329,19 @@ td .confirmed-no,
 
 .record-field {
   overflow: hidden;
-}
 
-.record-field strong {
-  display: block;
-  color: #7f8c8d;
-  font-size: 0.85rem;
-  margin-bottom: 0.25rem;
-}
+  strong {
+    display: block;
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
 
-.record-field span {
-  display: block;
-  color: #2c3e50;
-  word-break: break-word;
+  span {
+    display: block;
+    color: #2c3e50;
+    word-break: break-word;
+  }
 }
 
 .record-detail {
@@ -349,13 +349,13 @@ td .confirmed-no,
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.record-detail h2 {
-  margin: 0 0 1.5rem 0;
-  color: #2c3e50;
-  border-bottom: 2px solid #3498db;
-  padding-bottom: 0.5rem;
+  h2 {
+    margin: 0 0 1.5rem 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+  }
 }
 
 .field-list {
@@ -366,10 +366,10 @@ td .confirmed-no,
 .field-item {
   border-bottom: 1px solid #ecf0f1;
   padding-bottom: 1rem;
-}
 
-.field-item:last-child {
-  border-bottom: none;
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .field-label {
@@ -384,14 +384,14 @@ td .confirmed-no,
   color: #2c3e50;
   font-size: 1rem;
   word-break: break-word;
-}
 
-.field-value pre {
-  background: #f8f9fa;
-  padding: 0.75rem;
-  border-radius: 4px;
-  overflow-x: auto;
-  margin: 0;
+  pre {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0;
+  }
 }
 
 .linked-records {
@@ -408,11 +408,11 @@ td .confirmed-no,
   background: #ecf5ff;
   border-radius: 4px;
   transition: background-color 0.2s;
-}
 
-.linked-record-link:hover {
-  background: #d4e9ff;
-  text-decoration: underline;
+  &:hover {
+    background: #d4e9ff;
+    text-decoration: underline;
+  }
 }
 
 .no-tables {
@@ -421,21 +421,21 @@ td .confirmed-no,
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.no-tables h2 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
-}
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
 
-.no-tables p {
-  color: #7f8c8d;
-  line-height: 1.6;
-}
+  p {
+    color: #7f8c8d;
+    line-height: 1.6;
+  }
 
-.no-tables code {
-  background: #f8f9fa;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  code {
+    background: #f8f9fa;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
 }
