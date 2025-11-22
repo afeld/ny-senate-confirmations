@@ -173,6 +173,10 @@ a {
   transition: color 0.3s ease;
 }
 
+.gridjs-td ul {
+  padding-inline-start: 15px;
+}
+
 /* Mobile styles */
 @media (max-width: 768px) {
   .hamburger {

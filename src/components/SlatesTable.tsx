@@ -1,10 +1,11 @@
 import React from "react";
 import { html } from "gridjs";
-import { useSlatesTableData } from "../hooks/useAirtableData";
+import { Positions, useSlatesTableData } from "../hooks/useAirtableData";
 import TableGrid from "./TableGrid";
 import { linkGenerators } from "../utils/linkHelpers";
 import { renderToString } from "react-dom/server";
 import { ConfirmedDetail } from "./Confirmed";
+import PositionsList from "./PositionsList";
 
 const SlatesTable: React.FC = () => {
   const { data, loading } = useSlatesTableData();
@@ -31,7 +32,14 @@ const SlatesTable: React.FC = () => {
         "Slate of Day",
         {
           name: "Positions",
-          formatter: (cell: any) => html(cell),
+          formatter: (cell: any) =>
+            html(
+              renderToString(
+                <PositionsList positionData={cell as Positions}></PositionsList>
+              )
+            ),
+          // @ts-ignore
+          width: "40%",
         },
         {
           name: "Confirmed?",

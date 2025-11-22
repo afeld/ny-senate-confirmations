@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import AirtableService, { AirtableRecord } from "../services/airtable";
-import { linkGenerators } from "../utils/linkHelpers";
 
 export const useTableData = (tableName: string) => {
   const [data, setData] = useState<AirtableRecord[]>([]);
@@ -116,6 +115,14 @@ export const useNomineesTableData = () => {
   return { data, loading };
 };
 
+export interface Position {
+  id: string;
+  role: string;
+  org: string;
+}
+
+export type Positions = Position[];
+
 export const useSlatesTableData = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -143,7 +150,7 @@ export const useSlatesTableData = () => {
           const uniquePositionIds = [...new Set(positionIds)];
 
           // Create array of position data for sorting
-          const positionData = uniquePositionIds
+          const positionData: Positions = uniquePositionIds
             .map((id) => {
               const position = positionsMap.get(id);
               if (!position) return null;
@@ -154,16 +161,11 @@ export const useSlatesTableData = () => {
           // Sort by organization
           positionData.sort((a, b) => a!.org.localeCompare(b!.org));
 
-          // Create links separated by line breaks
-          const positionLinks = positionData
-            .map((p) => linkGenerators.position(p!.id, `${p!.role}, ${p!.org}`))
-            .join("<br>");
-
           return [
             record.id,
             record.fields["Date"] || "",
             record.fields["Slate of Day"] || "",
-            positionLinks || "",
+            positionData,
             record.fields["Confirmed?"] || "",
             record.fields["Ayes"] || 0,
             record.fields["Nays"] || 0,
