@@ -23,13 +23,12 @@ const SlatesTable: React.FC = () => {
           hidden: true,
         },
         {
-          name: "Date",
+          name: "Slate",
           formatter: (cell: any, row: any) => {
             const id = row.cells[0].data;
             return html(linkGenerators.slate(id, cell));
           },
         },
-        "Slate of Day",
         {
           name: "Positions",
           formatter: (cell: any) =>

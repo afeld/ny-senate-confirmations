@@ -161,10 +161,13 @@ export const useSlatesTableData = () => {
           // Sort by organization
           positionData.sort((a, b) => a!.org.localeCompare(b!.org));
 
+          const date = record.fields["Date"];
+          const slateOfDay = record.fields["Slate of Day"];
+          const displayName = `${date}.${slateOfDay}`;
+
           return [
             record.id,
-            record.fields["Date"] || "",
-            record.fields["Slate of Day"] || "",
+            displayName,
             positionData,
             record.fields["Confirmed?"] || "",
             record.fields["Ayes"] || 0,
