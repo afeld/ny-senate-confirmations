@@ -1,29 +1,61 @@
+/* try and match https://reinventalbany.org/wp-content/themes/reinvent-3.0/css/main.css */
+
+:root {
+  --ri-light-blue: #00b0dc;
+  --ri-dark-blue: #235976;
+  --ri-grey: #282828;
+}
+
+body,
+.gridjs td.gridjs-td {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ri-grey);
+  text-rendering: geometricPrecision;
+}
+
+a {
+  color: var(--ri-dark-blue);
+
+  &:hover {
+    color: var(--ri-light-blue);
+  }
+}
+
 .app-container {
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
 .app-header {
-  background-color: #2c3e50;
   padding: 1rem 2rem;
+  background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
   position: relative;
+
+  & a {
+  text-decoration: none;
+}
+
+  & h1 {
+  margin: 0;
+  color: var(--ri-light-blue);
+  font-size: 2rem;
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  }
 }
 
 .app-title {
-  text-decoration: none;
-  color: inherit;
   flex: 1;
-}
-
-.app-header h1 {
-  margin: 0;
-  color: white;
-  font-size: 1.5rem;
 }
 
 /* Hamburger menu button */
@@ -41,7 +73,7 @@
 .hamburger span {
   width: 25px;
   height: 3px;
-  background-color: white;
+  background-color: var(--ri-grey);
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -125,15 +157,11 @@
 }
 
 .nav-link {
-  color: white;
-  text-decoration: none;
+  color: var(--ri-grey);
+  font-weight: 600;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  transition: color 0.3s ease;
 }
 
 /* Mobile styles */
@@ -148,13 +176,14 @@
     right: -100%;
     height: 100vh;
     width: 250px;
-    background-color: #2c3e50;
+    background-color: white;
     flex-direction: column;
     padding: 5rem 2rem 2rem;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
     z-index: 1000;
     gap: 0;
+    text-align: center;
   }
 
   .main-nav.open {
